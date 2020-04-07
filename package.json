@@ -1,0 +1,43 @@
+{
+  "name": "movieApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/masked-view": "^0.1.7",
+    "axios": "^0.19.2",
+    "formik": "^2.1.4",
+    "jetifier": "^1.6.5",
+    "mobx": "^5.15.4",
+    "mobx-react": "^5.4.4",
+    "native-base": "^2.13.12",
+    "react": "16.8.3",
+    "react-native": "0.59.8",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-reanimated": "^1.7.1",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.4.0",
+    "react-native-vector-icons": "^6.6.0",
+    "react-navigation": "^4.3.7",
+    "react-navigation-stack": "^2.3.11",
+    "react-navigation-tabs": "^2.8.11",
+    "yup": "^0.28.3"
+  },
+  "devDependencies": {
+    "@babel/core": "7.8.6",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/preset-flow": "^7.9.0",
+    "@babel/runtime": "7.8.4",
+    "babel-jest": "25.1.0",
+    "jest": "25.1.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
