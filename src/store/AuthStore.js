@@ -1,5 +1,6 @@
 import {action, observable} from "mobx";
 import AsyncStorage from "@react-native-community/async-storage";
+import NavigationService from "../NavigationService";
 
 class AuthStore {
     @observable token = null;
@@ -7,9 +8,36 @@ class AuthStore {
     @action
     async saveToken(token) {
         try {
-            AsyncStorage.setItem('token', token)
+            await AsyncStorage.setItem('token', token)
+            await this.setupAuth();
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    @action
+    async setupAuth() {
+        await this.getToken();
+    }
+
+    @action
+    async removeToken() {
+        await AsyncStorage.removeItem('token')
+        await this.getToken();
+    }
+
+    @action
+    async getToken() {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                NavigationService.navigate('Auth')
+                return false;
+            }
+            this.token = token;
+            NavigationService.navigate('App')
+        } catch (e) {
+            console.warn(e)
         }
     }
 }
