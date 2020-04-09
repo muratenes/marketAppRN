@@ -1,20 +1,39 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {ListItem, Left, Right,Card,CardItem,Thumbnail,Image} from 'native-base';
+import {Left, Right, Card, CardItem, Thumbnail, Image, Text} from 'native-base';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import NavigationService from "../../NavigationService";
 
 
-const MovieListItem = ({item}) => (
-        <Card onPress={()=>{NavigationService.navigate('ProductDetail',{item})}}>
+
+const ProductDetailListItem = ({item, index}) => (
+    <TouchableOpacity>
+        <Card>
             <CardItem>
-                <Text>Instrumental Songs</Text>
-                <Text note>Guitar</Text>
+                <Thumbnail source={{uri: item.image}}/>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text note>{item.desc}</Text>
             </CardItem>
+
             <CardItem>
-                <Icon name={'ios-musical-notes'} style={{color : '#ED4A6A'}} />
-                <Text>Listen now</Text>
+                <Left>
+                    <Text style={styles.priceText}> Adet Fiyatı : {item.price} ₺</Text>
+                </Left>
+                <Right>
+                    <Icon name={'shopping-basket'} style={{color: 'black'}} size={30}/>
+                </Right>
+
             </CardItem>
         </Card>
+    </TouchableOpacity>
 );
-export default MovieListItem;
+const styles = StyleSheet.create({
+    title: {
+        padding: 10,
+        fontSize: 20,
+        fontWeight: 'bold'
+    }, priceText: {
+        fontWeight: 'bold'
+    }
+});
+export default ProductDetailListItem;
+

@@ -9,28 +9,32 @@ import Home from '../src/screens/Home';
 //auth stack
 import Login from './screens/Auth/Login'
 import Register from './screens/Auth/Register'
+//import Icon from 'react-native-vector-icons';
 import {Icon} from 'native-base';
-import {createStackNavigator} from "react-navigation-stack";
-import AuthLoading from "./screens/AuthLoading";
-import MovieDetail from "./screens/MovieDetail";
-import ProductDetail from "./screens/Products/ProductDetail";
 
-const appStack = createStackNavigator({
+import AuthLoading from "./screens/AuthLoading";
+import BasketList from "./screens/Basket/BasketList";
+import Profile from "./screens/Profile";
+
+const appStack = createBottomTabNavigator({
     Home: {
         screen: Home,
         navigationOptions: {
-            title: 'Anasayfa'
+            title: 'Ürünler',
+            tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}}/>
         }
-    },MovieDetail: {
-        screen: MovieDetail,
+    }, BasketList: {
+        screen: BasketList,
         navigationOptions: {
-            title: 'Movie Detail'
+            title: 'Sepetim',
+            tabBarIcon: ({tintColor}) => <Icon name={'basket'} style={{color: tintColor}}/>
         }
     },
-    ProductDetail: {
-        screen: ProductDetail,
+    Profile: {
+        screen: Profile,
         navigationOptions: {
-            title: 'Ürün Detay'
+            title: 'Profil',
+            tabBarIcon: ({tintColor}) => <Icon name={'person'} style={{color: tintColor}}/>
         }
     }
 }, {headerLayoutPreset: 'center'});

@@ -1,7 +1,6 @@
 import {action, observable, runInAction} from "mobx";
 import axios from "axios";
 import {API_BASE} from "../constants";
-import AuthStore from "./AuthStore";
 
 
 class CompanyStore {
@@ -9,14 +8,9 @@ class CompanyStore {
 
     @action
     async getCompanies() {
-        const {data} = await axios.get(`${API_BASE}/stores`, {
-            headers: {
-                'Authorization': 'Bearer ' + AuthStore.token
-            }
-        })
+        const {data} = await axios.get(`${API_BASE}/stores`)
         runInAction(() => {
-            alert(data)
-            this.companies = data
+            this.companies = data.data
         })
     }
 }

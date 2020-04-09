@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-import {Button, Content, Input, Item, Spinner, Text, Picker, Textarea} from "native-base";
+import {Button, Content, Input, Item, Spinner, Text, Textarea,Picker} from "native-base";
+
 import {Formik} from "formik";
 
 //import api from '../../api/api';
@@ -13,12 +14,14 @@ import {API_BASE} from "../../constants";
 @inject('AuthStore', 'CompanyStore')
 @observer
 export default class RegisterForm extends Component {
+
     _handleSubmit = async (getData, bag) => {
         try {
             var formData = new FormData();
             for (var k in getData) {
                 formData.append(k, getData[k])
             }
+            console.log(formData);
             const {data} = await axios.post(`${API_BASE}/register`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
@@ -27,8 +30,8 @@ export default class RegisterForm extends Component {
             }
             this.props.navigation.navigate('Login')
         } catch (e) {
-            alert(e)
             console.log(e)
+            alert(e)
         }
     };
 
@@ -36,24 +39,13 @@ export default class RegisterForm extends Component {
         this.props.CompanyStore.getCompanies()
     }
 
-    countryList = () => {
-        const {CompanyStore} = this.props;
-        return (CompanyStore.companies.map((x, i) => {
-            return (<Picker.Item label={x} key={i} value={x}/>)
-        }));
-    }
 
     render() {
         const {CompanyStore} = this.props;
-        const options = {
-            "1": "Home",
-            "2": "Food",
-            "3": "Car",
-            "4": "Bank",
-        };
-        Object.keys(options).map((key, value) => {
-            console.log(key, value)
+        let serviceItems = CompanyStore.companies.map((s, i) => {
+            return <Picker.Item value={s.id} label={s.name}/>
         });
+
         return (
             <Formik
                 initialValues={{
@@ -76,7 +68,8 @@ export default class RegisterForm extends Component {
                       touched,
                       setFieldTouched,
                       isValid,
-                      isSubmitting
+                      isSubmitting,
+                      setFieldValue
                   }) => (
                     <Content style={{padding: 10}}>
                         <Item error={errors.username && touched.username}>
@@ -176,10 +169,18 @@ export default class RegisterForm extends Component {
                                 returnKeyType={'go'}
                                 style={{height: 50, width: 150}}
                                 selectedValue={values.ref_user}
-                                onValueChange={handleChange('ref_user')}
+                                onValueChange={(itemValue, itemIndex) => {
+                                    setFieldValue('ref_user', itemValue)
+                                    this.setState({ref_user: itemValue})
+                                }}
                                 onBlur={() => setFieldTouched('ref_user')}
                             >
                                 <Picker.Item label="--Sütçü Seçiniz--" value=""/>
+                                {
+                                    CompanyStore.companies.map((v) => {
+                                        return <Picker.Item label={v.name} value={v.id}/>
+                                    })
+                                }
                             </Picker>
 
                             {/*{(errors.ref_user && touched.ref_user) &&*/}

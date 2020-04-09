@@ -7,28 +7,16 @@ import ProductDetailListItem from "../Products/ProductDetailListItem";
 
 @inject("ProductStore")
 @observer
-export default class Home extends Component {
+export default class BasketList extends Component {
     static navigationOptions = {
         headerRight: () => <LogoutButton/>,
     }
 
-    componentDidMount(): void {
-        this.props.ProductStore.getProducts();
-    }
 
     render() {
-        const {ProductStore} = this.props;
         return (
             <Container>
-                <LogoutButton/>
-                <Content>
-                    <View>
-                        <FlatList data={ProductStore.products}
-                                  keyExtractor={item => item.id}
-                                  renderItem={({item}) => <ProductDetailListItem item={item} />}
-                        />
-                    </View>
-                </Content>
+             <Text>Sepet</Text>
             </Container>
         );
     }

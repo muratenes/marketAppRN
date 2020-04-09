@@ -24,7 +24,7 @@ const validations = Yup.object().shape({
         .required("telefon gereklidir"),
     address: Yup
         .string()
-        .min(10,"en az 10 karakter olmalı")
+        .min(3,"en az 3 karakter olmalı")
         .max(255)
         .required("Adres bilgisi gereklidir")
 });
