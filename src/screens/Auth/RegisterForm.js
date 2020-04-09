@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Button, Content, Input, Item, Spinner, Text} from "native-base";
+import {Button, Content, Input, Item, Spinner, Text, Picker, Textarea} from "native-base";
 import {Formik} from "formik";
 
 //import api from '../../api/api';
@@ -10,31 +10,60 @@ import axios from 'axios';
 import {API_BASE} from "../../constants";
 
 
-@inject('AuthStore')
+@inject('AuthStore', 'CompanyStore')
 @observer
 export default class RegisterForm extends Component {
-    _handleSubmit = async ({username, password}, bag) => {
+    _handleSubmit = async (getData, bag) => {
         try {
-            const {data} = await axios.post(`${API_BASE}/register`, {username, password});
+            var formData = new FormData();
+            for (var k in getData) {
+                formData.append(k, getData[k])
+            }
+            const {data} = await axios.post(`${API_BASE}/register`, formData);
             bag.setSubmitting(false);
-            if (data.hasOwnProperty('errors')) {
-                bag.setErrors(data.errors);
+            if (!data.status) {
+                alert(data.message)
                 return false;
             }
             this.props.navigation.navigate('Login')
         } catch (e) {
-            bag.setSubmitting(false);
-            bag.setErrors(e)
+            alert(e)
+            console.log(e)
         }
     };
 
+    componentDidMount(): void {
+        this.props.CompanyStore.getCompanies()
+    }
+
+    countryList = () => {
+        const {CompanyStore} = this.props;
+        return (CompanyStore.companies.map((x, i) => {
+            return (<Picker.Item label={x} key={i} value={x}/>)
+        }));
+    }
+
     render() {
+        const {CompanyStore} = this.props;
+        const options = {
+            "1": "Home",
+            "2": "Food",
+            "3": "Car",
+            "4": "Bank",
+        };
+        Object.keys(options).map((key, value) => {
+            console.log(key, value)
+        });
         return (
             <Formik
                 initialValues={{
                     username: '',
                     password: '',
-                    passwordConfirm: ''
+                    c_password: '',
+                    name: '',
+                    ref_user: '',
+                    phone: '',
+                    address: '',
                 }}
                 onSubmit={this._handleSubmit}
                 validationSchema={validations}
@@ -56,7 +85,7 @@ export default class RegisterForm extends Component {
                                 onSubmitEditing={() => this.passwordRef._root.focus()}
                                 onChangeText={handleChange('username')}
                                 value={values.username}
-                                placeholder='username'
+                                placeholder='Kullanıcı Adı'
                                 onBlur={() => setFieldTouched('username')}
                                 autoCorrect={false}
                                 autoCapitalize={'none'}
@@ -70,10 +99,10 @@ export default class RegisterForm extends Component {
                             <Input
                                 ref={ref => this.passwordRef = ref}
                                 returnKeyType={'next'}
-                                onSubmitEditing={() => this.passwordConfirmRef._root.focus()}
+                                onSubmitEditing={() => this.c_password._root.focus()}
                                 onChangeText={handleChange('password')}
                                 value={values.password}
-                                placeholder='password'
+                                placeholder='Parola'
                                 onBlur={() => setFieldTouched('password')}
                                 autoCapitalize={'none'}
                                 secureTextEntry={true}
@@ -83,20 +112,78 @@ export default class RegisterForm extends Component {
                             <Text style={{color: 'red'}}>{errors.password}</Text>}
                         </Item>
 
-                        <Item error={errors.passwordConfirm && touched.passwordConfirm}>
+                        <Item error={errors.c_password && touched.c_password}>
                             <Input
-                                ref={ref => this.passwordConfirmRef = ref}
+                                ref={ref => this.c_password = ref}
                                 returnKeyType={'go'}
-                                onChangeText={handleChange('passwordConfirm')}
-                                value={values.passwordConfirm}
-                                placeholder='password confirmation'
-                                onBlur={() => setFieldTouched('passwordConfirm')}
+                                onChangeText={handleChange('c_password')}
+                                value={values.c_password}
+                                placeholder='Parola tekrar'
+                                onBlur={() => setFieldTouched('c_password')}
                                 autoCapitalize={'none'}
                                 secureTextEntry={true}
                             />
 
-                            {(errors.passwordConfirm && touched.passwordConfirm) &&
-                            <Text style={{color: 'red'}}>{errors.passwordConfirm}</Text>}
+                            {(errors.c_password && touched.c_password) &&
+                            <Text style={{color: 'red'}}>{errors.c_password}</Text>}
+                        </Item>
+                        <Item error={errors.name && touched.name}>
+                            <Input
+                                returnKeyType={'next'}
+                                onChangeText={handleChange('name')}
+                                value={values.name}
+                                placeholder='Ad & Soyad'
+                                onBlur={() => setFieldTouched('name')}
+                                autoCorrect={false}
+                                autoCapitalize={'none'}
+                            />
+
+                            {(errors.name && touched.name) &&
+                            <Text style={{color: 'red'}}>{errors.name}</Text>}
+                        </Item>
+                        <Item error={errors.phone && touched.phone}>
+                            <Input
+                                returnKeyType={'next'}
+                                onChangeText={handleChange('phone')}
+                                value={values.phone}
+                                placeholder='Telefon'
+                                onBlur={() => setFieldTouched('phone')}
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                autoCapitalize={'none'}
+                            />
+
+                            {(errors.phone && touched.phone) &&
+                            <Text style={{color: 'red'}}>{errors.phone}</Text>}
+                        </Item>
+                        <Item error={errors.address && touched.address}>
+                            <Input
+                                returnKeyType={'next'}
+                                onChangeText={handleChange('address')}
+                                value={values.address}
+                                multiline={true}
+                                numberOfLines={5}
+                                placeholder='Adres bilgisi'
+                                onBlur={() => setFieldTouched('address')}
+                                autoCorrect={false}
+                            />
+
+                            {(errors.address && touched.address) &&
+                            <Text style={{color: 'red'}}>{errors.address}</Text>}
+                        </Item>
+                        <Item error={errors.ref_user && touched.ref_user}>
+                            <Picker
+                                returnKeyType={'go'}
+                                style={{height: 50, width: 150}}
+                                selectedValue={values.ref_user}
+                                onValueChange={handleChange('ref_user')}
+                                onBlur={() => setFieldTouched('ref_user')}
+                            >
+                                <Picker.Item label="--Sütçü Seçiniz--" value=""/>
+                            </Picker>
+
+                            {/*{(errors.ref_user && touched.ref_user) &&*/}
+                            {/*<Text style={{color: 'red'}}>{errors.ref_user}</Text>}*/}
                         </Item>
 
                         <Button

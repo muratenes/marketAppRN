@@ -12,18 +12,23 @@ import {API_BASE} from "../../constants";
 
 @inject('AuthStore')
 export default class LoginForm extends Component {
-    _handleSubmit = async ({username, password}, bag) => {
+    _handleSubmit = async (postData, bag) => {
         try {
-            const {data} = await axios.post(`${API_BASE}/authenticate`, {username, password});
+            var formData = new FormData();
+            for (var k in postData) {
+                formData.append(k, postData[k])
+            }
+            console.log(formData)
+            console.log(postData);
+            const {data} = await axios.post(`${API_BASE}/login`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
                 alert(data.message)
                 return false;
             }
-            this.props.AuthStore.saveToken(data.token);
+            this.props.AuthStore.saveToken(data.data);
         } catch (e) {
-            bag.setSubmitting(false);
-            bag.setErrors(e)
+            alert(e)
         }
     };
 

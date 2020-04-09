@@ -13,6 +13,7 @@ import {Icon} from 'native-base';
 import {createStackNavigator} from "react-navigation-stack";
 import AuthLoading from "./screens/AuthLoading";
 import MovieDetail from "./screens/MovieDetail";
+import ProductDetail from "./screens/Products/ProductDetail";
 
 const appStack = createStackNavigator({
     Home: {
@@ -24,6 +25,12 @@ const appStack = createStackNavigator({
         screen: MovieDetail,
         navigationOptions: {
             title: 'Movie Detail'
+        }
+    },
+    ProductDetail: {
+        screen: ProductDetail,
+        navigationOptions: {
+            title: 'Ürün Detay'
         }
     }
 }, {headerLayoutPreset: 'center'});
@@ -41,7 +48,7 @@ const authStack = createBottomTabNavigator({
         }
     }
 }, {
-    initialRouteName: 'Login',
+    initialRouteName: 'Register',
     tabBarOptions: {
         activeTintColor: "#fff",
         inactiveBackgroundColor: "#5886589",
