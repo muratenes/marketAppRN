@@ -9,6 +9,7 @@ import validations from './registerValidation';
 import {inject, observer} from "mobx-react";
 import axios from 'axios';
 import {API_BASE} from "../../constants";
+import AuthStore from "../../store/AuthStore";
 
 
 @inject('AuthStore', 'CompanyStore')
@@ -21,16 +22,13 @@ export default class RegisterForm extends Component {
             for (var k in getData) {
                 formData.append(k, getData[k])
             }
-            console.log(formData);
             const {data} = await axios.post(`${API_BASE}/register`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
-                alert(data.message)
                 return false;
             }
-            this.props.navigation.navigate('Login')
+            AuthStore.saveToken(data.data.token)
         } catch (e) {
-            console.log(e)
             alert(e)
         }
     };
@@ -42,10 +40,6 @@ export default class RegisterForm extends Component {
 
     render() {
         const {CompanyStore} = this.props;
-        let serviceItems = CompanyStore.companies.map((s, i) => {
-            return <Picker.Item value={s.id} label={s.name}/>
-        });
-
         return (
             <Formik
                 initialValues={{
@@ -183,8 +177,8 @@ export default class RegisterForm extends Component {
                                 }
                             </Picker>
 
-                            {/*{(errors.ref_user && touched.ref_user) &&*/}
-                            {/*<Text style={{color: 'red'}}>{errors.ref_user}</Text>}*/}
+                            {(errors.ref_user && touched.ref_user) &&
+                            <Text style={{color: 'red'}}>{errors.ref_user}</Text>}
                         </Item>
 
                         <Button

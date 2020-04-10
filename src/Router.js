@@ -10,7 +10,7 @@ import Home from '../src/screens/Home';
 import Login from './screens/Auth/Login'
 import Register from './screens/Auth/Register'
 //import Icon from 'react-native-vector-icons';
-import {Icon} from 'native-base';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import AuthLoading from "./screens/AuthLoading";
 import BasketList from "./screens/Basket/BasketList";
@@ -21,23 +21,23 @@ const appStack = createBottomTabNavigator({
         screen: Home,
         navigationOptions: {
             title: 'Ürünler',
-            tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}}/>
+            tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}}  size={22}/>
         }
     }, BasketList: {
         screen: BasketList,
         navigationOptions: {
-            title: 'Sepetim',
-            tabBarIcon: ({tintColor}) => <Icon name={'basket'} style={{color: tintColor}}/>
+            title: 'Siparişlerim',
+            tabBarIcon: ({tintColor}) => <Icon name={'shopping-bag'} style={{color: tintColor}}  size={22}/>
         }
     },
     Profile: {
         screen: Profile,
         navigationOptions: {
             title: 'Profil',
-            tabBarIcon: ({tintColor}) => <Icon name={'person'} style={{color: tintColor}}/>
+            tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}}  size={22} />
         }
     }
-}, {headerLayoutPreset: 'center'});
+}, {headerLayoutPreset: 'center', initialRouteName: 'BasketList'});
 
 const authStack = createBottomTabNavigator({
     Login: {

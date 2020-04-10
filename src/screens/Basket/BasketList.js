@@ -1,22 +1,29 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, FlatList, View, TouchableOpacity, Image} from 'react-native';
-import LogoutButton from "../../components/LogoutButton";
-import {Container, Content, CardItem, Card, Thumbnail, Icon, Left, Right, Button, Grid, Col} from 'native-base';
+import {FlatList} from 'react-native';
+import {Container,View} from 'native-base';
 import {inject, observer} from "mobx-react";
-import ProductDetailListItem from "../Products/ProductDetailListItem";
+import Navbar from "../../components/Navbar";
+import BasketListItem from "./BasketListItem";
 
-@inject("ProductStore")
+@inject("BasketStore")
 @observer
 export default class BasketList extends Component {
-    static navigationOptions = {
-        headerRight: () => <LogoutButton/>,
+
+
+    componentDidMount(): void {
+        this.props.BasketStore.getBasket();
     }
 
-
     render() {
+        const {BasketStore} = this.props;
         return (
             <Container>
-             <Text>Sepet</Text>
+                <Navbar/>
+
+                <FlatList data={BasketStore.basketItems}
+                          keyExtractor={item => item.id}
+                          renderItem={({item}) => <BasketListItem item={item}/>}
+                />
             </Container>
         );
     }
