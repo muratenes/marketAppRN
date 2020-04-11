@@ -15,44 +15,57 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import AuthLoading from "./screens/AuthLoading";
 import BasketList from "./screens/Basket/BasketList";
 import Profile from "./screens/Profile";
+import OrderList from "./screens/Order/OrderList";
+import {createStackNavigator} from "react-navigation-stack";
+import {ICON_SIZE} from "./constants";
+
 
 const appStack = createBottomTabNavigator({
     Home: {
         screen: Home,
         navigationOptions: {
             title: 'Ürünler',
-            tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}}  size={22}/>
+            tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}} size={22}/>
         }
     }, BasketList: {
         screen: BasketList,
         navigationOptions: {
+            title: 'Sepetim',
+            tabBarIcon: ({tintColor}) => <Icon name={'shopping-basket'} style={{color: tintColor}} size={22}/>,
+        },
+    },
+    OrderList: {
+        screen: OrderList,
+        navigationOptions: {
             title: 'Siparişlerim',
-            tabBarIcon: ({tintColor}) => <Icon name={'shopping-bag'} style={{color: tintColor}}  size={22}/>
+            tabBarIcon: ({tintColor}) => <Icon name={'shopping-bag'} style={{color: tintColor}} size={22}/>
         }
     },
     Profile: {
         screen: Profile,
         navigationOptions: {
             title: 'Profil',
-            tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}}  size={22} />
+            tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
-    }
-}, {headerLayoutPreset: 'center', initialRouteName: 'BasketList'});
+    },
+}, {headerLayoutPreset: 'center', initialRouteName: 'OrderList'});
 
 const authStack = createBottomTabNavigator({
     Login: {
         screen: Login,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => <Icon name={'log-in'} style={{color: tintColor}}/>
+            title: 'Giriş',
+            tabBarIcon: ({tintColor}) => <Icon name={'sign-in'} size={ICON_SIZE} style={{color: tintColor}}/>
         }
     }, Register: {
         screen: Register,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => <Icon name={'person-add'} style={{color: tintColor}}/>
+            title: 'Kayıt',
+            tabBarIcon: ({tintColor}) => <Icon name={'user'} size={ICON_SIZE} style={{color: tintColor}}/>
         }
     }
 }, {
-    initialRouteName: 'Register',
+    initialRouteName: 'Login',
     tabBarOptions: {
         activeTintColor: "#fff",
         inactiveBackgroundColor: "#5886589",

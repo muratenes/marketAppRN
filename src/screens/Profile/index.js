@@ -10,6 +10,7 @@ import {ScrollView} from 'react-native';
 
 import {API_BASE} from "../../constants";
 import AuthStore from "../../store/AuthStore";
+import AuthLoading from "../AuthLoading";
 
 @inject('UserStore')
 @observer
@@ -41,7 +42,7 @@ export default class Profile extends Component {
             const user = UserStore.user;
             return (
                 <ScrollView>
-                    <Navbar/>
+                    <Navbar title={'Profil'}/>
                     <Formik
                         initialValues={{
                             username: user.username,
@@ -174,7 +175,7 @@ export default class Profile extends Component {
             );
         } else {
             return (
-                <Text>Yükleniyor</Text>
+                <AuthLoading/>
             );
         }
 

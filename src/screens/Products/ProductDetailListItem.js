@@ -2,11 +2,16 @@ import React from 'react';
 import {Left, Right, Card, CardItem, Thumbnail, Image, Text} from 'native-base';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import BasketStore from "../../store/BasketStore";
+import NavigationService from "../../NavigationService";
 
-
+addToBasket = (item) => {
+    BasketStore.addToBasket(item.id,1)
+    NavigationService.navigate('BasketList');
+}
 
 const ProductDetailListItem = ({item, index}) => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress = {()=> this.addToBasket(item) }>
         <Card>
             <CardItem>
                 <Thumbnail source={{uri: item.image}}/>
