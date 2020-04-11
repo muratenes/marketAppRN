@@ -4,7 +4,9 @@ import LogoutButton from "../../components/LogoutButton";
 import {Container} from 'native-base';
 import {inject, observer} from "mobx-react";
 import ProductDetailListItem from "../Products/ProductDetailListItem";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar";RefreshControl
+import {RefreshControl} from 'react-native';
+
 import AuthLoading from "../AuthLoading";
 
 @inject("ProductStore")
@@ -38,32 +40,25 @@ export default class Home extends Component {
         )
     };
 
-    renderHeader = () => {
-        const {text} = this.state;
-        return (
-            <View>
-
-            </View>
-        )
-    };
-
 
     render() {
         return (
-            <FlatList
-                ListFooterComponent={this.renderFooter}
-                ListHeaderComponent={this.renderHeader()}
-                renderItem={({item}) => <ProductDetailListItem item={item}/>}
-                keyExtractor={item => item.id}
-                data={this.props.ProductStore.products}
-
-                // onEndReached={this.loadMore}
-                // onEndReachedThreshold={0}
-                // onMomentumScrollBegin={() => { this.duringMomentum = false }}
-
-                refreshing={this.props.ProductStore.refreshing}
-                onRefresh={this.onRefresh}
-            />
+            <ScrollView refreshControl={
+                <RefreshControl
+                    refreshing={this.props.ProductStore.refreshing}
+                    onRefresh={this.onRefresh}
+                />
+            }>
+                <Navbar title={'Ürünler'}/>
+                <FlatList
+                    ListFooterComponent={this.renderFooter}
+                    renderItem={({item}) => <ProductDetailListItem item={item}/>}
+                    keyExtractor={item => item.id}
+                    data={this.props.ProductStore.products}
+                    //refreshing={this.props.ProductStore.refreshing}
+                    //onRefresh={this.onRefresh}
+                />
+            </ScrollView>
         );
     }
 }
