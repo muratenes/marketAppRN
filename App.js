@@ -7,6 +7,7 @@ import {Provider} from "mobx-react";
 import Router from "./src/Router";
 import NavigationService from "./src/NavigationService";
 import store from '../movieApp/src/store/';
+import AuthStore from "./src/store/AuthStore";
 
 
 export default class App extends Component {
@@ -30,7 +31,9 @@ messaging.hasPermission()
         if (enabled) {
             messaging.getToken()
                 .then(token => {
-                    console.log(token)
+                    if (AuthStore.firebase_token !== token || AuthStore.firebase_token === null) {
+                        AuthStore.saveFirebaseToken(token)
+                    }
                 })
                 .catch(error => { /* handle error */
                 });
@@ -57,7 +60,8 @@ PushNotification.configure({
 
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function (token) {
-        console.log('TOKEN:', token);
+        //console.log('TOKEN:', token);
+        //AuthStore.saveFirebaseToken(token)
     },
 
     // (required) Called when a remote or local notification is opened or received
