@@ -11,6 +11,8 @@ import axios from "axios";
 import {API_BASE} from "../../constants";
 import {runInAction} from "mobx";
 import NavigationService from "../../NavigationService";
+import BasketStore from "../../store/BasketStore";
+import {isInteger} from "formik";
 
 @inject("BasketStore", "OrderStore")
 @observer
@@ -19,16 +21,18 @@ export default class BasketList extends Component {
         super(props);
         this.state = {
             basketItems: [],
+            basketItemsLocal: [],
             accordionFlex: 1,
             accordionFlexDefaultValue: 1,
             orderNote: '',
-            loading: false
+            loading: false,
         }
     }
 
     componentDidMount(): void {
         this.props.BasketStore.getBasket();
     }
+
 
     showOrHideAccordion = () => {
         let accordionFlex = 1;
@@ -75,9 +79,12 @@ export default class BasketList extends Component {
                         <View style={styles.basketDetailContainer}>
                             <View style={{flex: this.state.accordionFlex === this.state.accordionFlexDefaultValue ? 9 : 2}}>
                                 <TouchableOpacity style={{flex: 10, flexDirection: 'row'}} onPress={() => this.showOrHideAccordion()}>
-                                    <View style={{flex: 5}}><Text>Toplam Tutar : </Text></View>
-                                    <View style={{flex: 5}}><Text style={{fontWeight: 'bold'}}>{BasketStore.basket.total_price} ₺</Text></View>
-                                    <View style={{flex: 5, alignItems: 'flex-end', paddingVertical: 4}}><Icon name={this.state.accordionFlex != 4 ? 'arrow-down' : 'arrow-up'} size={15}></Icon></View>
+                                    <View style={{flex: 4}}><Text>Toplam Tutar : </Text></View>
+                                    <View style={{flex: 2}}><Text style={{fontWeight: 'bold'}}>{BasketStore.basket.total_price} ₺</Text></View>
+                                    <View style={{flex: 4}}>
+                                        {this.props.BasketStore.hasBasketItemQtyChange && <Button success small onPress={() => this.props.BasketStore.updateBasketByBasketItems()}><Text> Güncelle </Text></Button>}
+                                    </View>
+                                    <View style={{flex: 2, alignItems: 'flex-end', paddingVertical: 4}}><Icon name={this.state.accordionFlex != 4 ? 'arrow-down' : 'arrow-up'} size={15}></Icon></View>
                                 </TouchableOpacity>
 
                             </View>
@@ -101,8 +108,8 @@ export default class BasketList extends Component {
                         <ScrollView>
                             <FlatList data={BasketStore.basketItems}
                                       keyExtractor={item => item.id}
-                                      renderItem={({item}) => (
-                                          this.basketListItem(item)
+                                      renderItem={({item, index}) => (
+                                          this.basketListItem(item, index)
                                       )}/>
                         </ScrollView>
                     </View>
@@ -132,7 +139,16 @@ export default class BasketList extends Component {
         this.props.BasketStore.removeItemFromBasket(item.product.id)
     }
 
-    basketListItem = (item) => {
+    onChangeInputText = (item, index, value) => {
+        this.props.BasketStore.basketItems = this.props.BasketStore.basketItems.map((itemData: any) => {
+            let qty = parseInt(itemData.id === item.id ? value : itemData.qty);
+            qty = !isNaN(qty) ? qty : '';
+            return {"id": itemData.id, "qty": qty, 'price': itemData.price, 'total_price': itemData.total_price, "product": itemData.product};
+        });
+        this.props.BasketStore.hasBasketItemQtyChange = true;
+    }
+
+    basketListItem = (item, index) => {
         return (
             <View style={styles.itemStyle}>
                 <Card>
@@ -151,7 +167,9 @@ export default class BasketList extends Component {
                             </View>
                             <View style={{flex: 3}}>
                                 <Item>
-                                    <Input placeholder={'adet'} style={styles.input} keyboardType={'numeric'} maxLength={30} value={item.qty + ""}
+                                    <Input placeholder={'adet'} style={styles.input} keyboardType={'numeric'} maxLength={30}
+                                           value={BasketStore.basketItems[index].qty + ""}
+                                           onChangeText={(value) => this.onChangeInputText(item, index, value)}
 
                                     />
                                 </Item>

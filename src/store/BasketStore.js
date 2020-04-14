@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 class BasketStore {
     @observable basket = null;
     @observable basketItems = [];
+    @observable hasBasketItemQtyChange = false;
 
     @action
     async getBasket() {
@@ -15,45 +16,73 @@ class BasketStore {
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            }else{
+            } else {
                 alert(data.message)
             }
         })
     }
 
     @action
-    async addToBasket(productId,qty){
-        const {data} = await  axios.post(`${API_BASE}/addToBasket/${productId}`,{qty})
+    async addToBasket(productId, qty) {
+        const {data} = await axios.post(`${API_BASE}/addToBasket/${productId}`, {qty})
         runInAction(() => {
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            }else{
+            } else {
                 alert(data.message)
             }
         })
     }
 
     @action
-    async decrementProductItem(productId){
-        const {data} = await  axios.post(`${API_BASE}/decrementProductItem/${productId}`)
+    async updateBasketItemQty(productId, qty) {
+        const {data} = await axios.post(`${API_BASE}/updateBasketItemQty/${productId}`, {qty})
         runInAction(() => {
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            }else{
+            } else {
                 alert(data.message)
             }
         })
     }
+
     @action
-    async removeItemFromBasket(productId){
-        const {data} = await  axios.delete(`${API_BASE}/removeFromBasket/${productId}`)
+    async updateBasketByBasketItems() {
+        const {data} = await axios.post(`${API_BASE}/updateBasketByBasketItems`, this.basketItems)
+        runInAction(() => {
+            if (data.status) {
+                this.basket = data.data;
+                this.hasBasketItemQtyChange = false;
+                this.basketItems = data.data.items;
+            } else {
+                alert(data.message)
+            }
+        })
+    }
+
+    @action
+    async decrementProductItem(productId) {
+        const {data} = await axios.post(`${API_BASE}/decrementProductItem/${productId}`)
         runInAction(() => {
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            }else{
+            } else {
+                alert(data.message)
+            }
+        })
+    }
+
+    @action
+    async removeItemFromBasket(productId) {
+        const {data} = await axios.delete(`${API_BASE}/removeFromBasket/${productId}`)
+        runInAction(() => {
+            if (data.status) {
+                this.basket = data.data;
+                this.basketItems = data.data.items;
+            } else {
                 alert(data.message)
             }
         })
