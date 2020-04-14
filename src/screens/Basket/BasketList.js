@@ -4,15 +4,13 @@ import {Card, CardItem, Container, Input, Item, Left, Right, Text, Thumbnail, Vi
 import {inject, observer} from "mobx-react";
 import Navbar from "../../components/Navbar";
 import {ScrollView} from 'react-native';
-
-import BasketListItem from "./BasketListItem";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 import {API_BASE} from "../../constants";
-import {runInAction} from "mobx";
 import NavigationService from "../../NavigationService";
 import BasketStore from "../../store/BasketStore";
-import {isInteger} from "formik";
+import styles from "./styles";
+import BasketListItem from "./BasketListItem";
 
 @inject("BasketStore", "OrderStore")
 @observer
@@ -108,9 +106,8 @@ export default class BasketList extends Component {
                         <ScrollView>
                             <FlatList data={BasketStore.basketItems}
                                       keyExtractor={item => item.id}
-                                      renderItem={({item, index}) => (
-                                          this.basketListItem(item, index)
-                                      )}/>
+                                      renderItem={({item, index}) => <BasketListItem item={item} index={index}/>}
+                            />
                         </ScrollView>
                     </View>
                 </View>}
@@ -129,113 +126,4 @@ export default class BasketList extends Component {
         );
     }
 
-    incrementBasketItemQty = (item) => {
-        this.props.BasketStore.addToBasket(item.product.id, 1)
-    }
-    decrementBasketItemQty = (item) => {
-        this.props.BasketStore.decrementProductItem(item.product.id)
-    }
-    removeItemFromBasket = (item) => {
-        this.props.BasketStore.removeItemFromBasket(item.product.id)
-    }
-
-    onChangeInputText = (item, index, value) => {
-        this.props.BasketStore.basketItems = this.props.BasketStore.basketItems.map((itemData: any) => {
-            let qty = parseInt(itemData.id === item.id ? value : itemData.qty);
-            qty = !isNaN(qty) ? qty : '';
-            return {"id": itemData.id, "qty": qty, 'price': itemData.price, 'total_price': itemData.total_price, "product": itemData.product};
-        });
-        this.props.BasketStore.hasBasketItemQtyChange = true;
-    }
-
-    basketListItem = (item, index) => {
-        return (
-            <View style={styles.itemStyle}>
-                <Card>
-                    <CardItem style={{flex: 1}}>
-                        <View style={{flex: 3}}>
-                            <Thumbnail source={{uri: item.product.image}}/>
-                        </View>
-                        <View style={{flex: 8}}>
-                            <Text style={styles.title}>{item.product.title}</Text>
-                        </View>
-                        <View style={{flex: 10, flexDirection: 'row'}}>
-                            <View style={styles.iconContainer}>
-                                <TouchableOpacity onPress={() => this.decrementBasketItemQty(item)}>
-                                    <Icon name={'minus'} danger size={30}/>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{flex: 3}}>
-                                <Item>
-                                    <Input placeholder={'adet'} style={styles.input} keyboardType={'numeric'} maxLength={30}
-                                           value={BasketStore.basketItems[index].qty + ""}
-                                           onChangeText={(value) => this.onChangeInputText(item, index, value)}
-
-                                    />
-                                </Item>
-                            </View>
-                            <View style={styles.iconContainer}>
-                                <TouchableOpacity onPress={() => this.incrementBasketItemQty(item)}>
-                                    <Icon name={'plus'} danger size={30}/>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </CardItem>
-
-                    <CardItem>
-                        <Left>
-                            <Text>{item.total_price} ₺ </Text>
-                        </Left>
-                        <Right>
-                            <TouchableOpacity onPress={() => this.removeItemFromBasket(item)}>
-                                <Icon name={'trash'} danger size={30}/>
-                            </TouchableOpacity>
-                        </Right>
-
-                    </CardItem>
-                </Card>
-            </View>
-        )
-    }
-    ;
-
 }
-
-const styles = StyleSheet.create({
-    basketDetailContainer: {
-        flex: 10, flexDirection: 'column', paddingVertical: 10, paddingHorizontal: 10, borderColor: '#dedede', borderWidth: 2, marginHorizontal: 5, marginVertical: 4
-    },
-    totalPrice: {
-        fontWeight: 'bold'
-    },
-    itemStyle: {
-        padding: 3
-    }, iconContainer: {
-        flex: 3, paddingVertical: 5, textAlign: 'center', alignItems: 'center', alignContent: 'center'
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    }, priceText: {
-        fontWeight: 'bold',
-    },
-    itemDetailContainer: {
-        flexDirection: 'row',
-        flex: 3,
-        height: '100%'
-    }, itemQtyContainer: {
-        flex: 5,
-        flexDirection: 'column',
-    }, input: {
-        fontSize: 20,
-        textAlign: 'center'
-    }, noItemONBasketText: {
-        fontSize: 20,
-        color: '#5a5a5a'
-    }, productsText: {
-        fontSize: 20,
-        color: '#a19b9b'
-    }
-});
