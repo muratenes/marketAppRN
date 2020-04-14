@@ -30,13 +30,14 @@ export default class OrderList extends Component {
                             expandedIconStyle={{color: "red"}}
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
+                            keyExtractor={item => ''+item.id}
                         />
                     </Content>
                 </Container>
             );
         } else {
             return (
-                <View></View>
+                <AuthLoading/>
             );
         }
 

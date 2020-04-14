@@ -53,7 +53,7 @@ export default class Home extends Component {
                 <FlatList
                     ListFooterComponent={this.renderFooter}
                     renderItem={({item}) => <ProductDetailListItem item={item}/>}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => ''+item.id}
                     data={this.props.ProductStore.products}
                     //refreshing={this.props.ProductStore.refreshing}
                     //onRefresh={this.onRefresh}
