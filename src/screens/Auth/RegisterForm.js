@@ -11,6 +11,7 @@ import axios from 'axios';
 import {API_BASE} from "../../constants";
 import AuthStore from "../../store/AuthStore";
 import AuthLoading from "../AuthLoading";
+import {showAlertDialog} from '../../helpers/helpers';
 
 
 @inject('AuthStore', 'CompanyStore')
@@ -26,10 +27,13 @@ export default class RegisterForm extends Component {
             const {data} = await axios.post(`${API_BASE}/register`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
+                showAlertDialog(data.message)
                 return false;
             }
             AuthStore.saveToken(data.data.token)
         } catch (e) {
+            console.warn(e)
+            console.log(e)
             alert(e)
         }
     };
@@ -105,7 +109,8 @@ export default class RegisterForm extends Component {
                                 <Item error={errors.c_password && touched.c_password}>
                                     <Input
                                         ref={ref => this.c_password = ref}
-                                        returnKeyType={'go'}
+                                        onSubmitEditing={() => this.name._root.focus()}
+                                        returnKeyType={'next'}
                                         onChangeText={handleChange('c_password')}
                                         value={values.c_password}
                                         placeholder='Parola tekrar'
@@ -119,6 +124,8 @@ export default class RegisterForm extends Component {
                                 </Item>
                                 <Item error={errors.name && touched.name}>
                                     <Input
+                                        ref={ref => this.name = ref}
+                                        onSubmitEditing={() => this.phone._root.focus()}
                                         returnKeyType={'next'}
                                         onChangeText={handleChange('name')}
                                         value={values.name}
@@ -133,6 +140,8 @@ export default class RegisterForm extends Component {
                                 </Item>
                                 <Item error={errors.phone && touched.phone}>
                                     <Input
+                                        ref={ref => this.phone = ref}
+                                        onSubmitEditing={() => this.address._root.focus()}
                                         returnKeyType={'next'}
                                         onChangeText={handleChange('phone')}
                                         value={values.phone}
@@ -148,6 +157,8 @@ export default class RegisterForm extends Component {
                                 </Item>
                                 <Item error={errors.address && touched.address}>
                                     <Input
+                                        ref={ref => this.address = ref}
+                                        onSubmitEditing={() => this.ref_user._root.focus()}
                                         returnKeyType={'next'}
                                         onChangeText={handleChange('address')}
                                         value={values.address}
@@ -165,6 +176,7 @@ export default class RegisterForm extends Component {
                                     <Picker
                                         returnKeyType={'go'}
                                         style={{height: 50, width: 150}}
+                                        keyExtractor={item => ''+item.id}
                                         selectedValue={values.ref_user}
                                         onValueChange={(itemValue, itemIndex) => {
                                             setFieldValue('ref_user', itemValue)

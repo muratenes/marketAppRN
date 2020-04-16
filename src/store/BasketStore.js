@@ -8,15 +8,20 @@ class BasketStore {
     @observable basket = null;
     @observable basketItems = [];
     @observable hasBasketItemQtyChange = false;
+    @observable refreshing = false;
+    @observable loading = false;
 
     @action
     async getBasket() {
+        this.refreshing = true;
         const {data} = await axios.get(`${API_BASE}/basket`)
         runInAction(() => {
             if (data.status) {
+                this.refreshing = false;
                 this.basket = data.data;
                 this.basketItems = data.data.items;
             } else {
+                this.refreshing = false;
                 alert(data.message)
             }
         })
@@ -50,13 +55,16 @@ class BasketStore {
 
     @action
     async updateBasketByBasketItems() {
+        this.loading = true;
         const {data} = await axios.post(`${API_BASE}/updateBasketByBasketItems`, this.basketItems)
         runInAction(() => {
             if (data.status) {
+                this.loading = false;
                 this.basket = data.data;
                 this.hasBasketItemQtyChange = false;
                 this.basketItems = data.data.items;
             } else {
+                this.loading = false;
                 alert(data.message)
             }
         })

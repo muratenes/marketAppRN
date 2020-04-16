@@ -55,8 +55,6 @@ export default class Home extends Component {
                     renderItem={({item}) => <ProductDetailListItem item={item}/>}
                     keyExtractor={item => ''+item.id}
                     data={this.props.ProductStore.products}
-                    //refreshing={this.props.ProductStore.refreshing}
-                    //onRefresh={this.onRefresh}
                 />
             </ScrollView>
         );

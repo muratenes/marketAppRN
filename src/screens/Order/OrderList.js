@@ -1,11 +1,12 @@
 import React, {Component} from "react";
-import {Container, Header, Content, Accordion, Text, View} from "native-base";
-import {StyleSheet} from 'react-native';
+import {Container, Header, Content, Accordion, Text, View, Button, Input} from "native-base";
+import {FlatList, RefreshControl, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Navbar from "../../components/Navbar";
 import {inject, observer} from "mobx-react";
 import AuthLoading from "../AuthLoading";
 import Icon from "react-native-vector-icons/FontAwesome";
+import EmptyOrder from "./EmptyOrder";
 
 
 @inject("OrderStore")
@@ -16,23 +17,38 @@ export default class OrderList extends Component {
         this.props.OrderStore.getOrders()
     }
 
-
+    onRefresh = () => {
+        this.setState({
+            page: 1,
+            refreshing: true
+        }, () => {
+            this.props.OrderStore.getOrders();
+        });
+    };
     render() {
         const {OrderStore} = this.props;
         if (OrderStore.loading === false) {
             return (
                 <Container>
-                    <Navbar/>
-                    <Content padder>
-                        <Accordion
-                            dataArray={OrderStore.orders}
-                            iconStyle={{color: "green"}}
-                            expandedIconStyle={{color: "red"}}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                            keyExtractor={item => ''+item.id}
-                        />
-                    </Content>
+                    <Navbar title={'Sepetim'}/>
+                    {OrderStore.orders.length > 0  && <Container>
+                        <Content padder>
+                            <Accordion
+                                refreshing={OrderStore.refreshing}
+                                onRefresh={this.onRefresh}
+                                dataArray={OrderStore.orders}
+                                iconStyle={{color: "green"}}
+                                expandedIconStyle={{color: "red"}}
+                                renderHeader={this._renderHeader}
+                                renderContent={this._renderContent}
+                                keyExtractor={item => '' + item.id}
+                                key={item => '' + item.id}
+                            />
+                        </Content>
+                    </Container>}
+                    {OrderStore.orders.length === 0 &&
+                    <EmptyOrder/>
+                    }
                 </Container>
             );
         } else {
