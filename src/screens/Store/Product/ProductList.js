@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, FlatList, ScrollView, View} from 'react-native';
+import {FlatList, ScrollView, View, RefreshControl, StyleSheet} from 'react-native';
 import {inject, observer} from "mobx-react";
-import ProductDetailListItem from "../Products/ProductDetailListItem";
-import Navbar from "../../components/Navbar";
+import StoreProductListItem from "./StoreProductListItem";
+import StoreNavbar from "../../../components/StoreNavbar";
+import NavigationService from "../../../NavigationService";
 
-RefreshControl
-import {RefreshControl} from 'react-native';
-
-import UserStore from "../../store/UserStore";
 
 @inject("ProductStore", "UserStore")
 @observer
-export default class Home extends Component {
+export default class ProductList extends Component {
 
     state = {
         text: ''
@@ -19,7 +16,9 @@ export default class Home extends Component {
 
     componentDidMount(): void {
         this.props.ProductStore.getProducts();
-        //this.props.UserStore.getUserFromSession();
+        //const item = {'title': 'Yumurta', 'price': 0.8, 'id': 1, 'discount_price': 0.6, 'status': true};
+        //NavigationService.navigate('StoreProductDetail', {item})
+
     }
 
     onRefresh = () => {
@@ -50,10 +49,13 @@ export default class Home extends Component {
                     onRefresh={this.onRefresh}
                 />
             }>
-                <Navbar title={'Ürünler'}/>
+                <StoreNavbar title={'Ürünlerim'}/>
                 <FlatList
+                    columnWrapperStyle={{justifyContent: 'space-between'}}
+                    horizontal={false}
+                    numColumns={2}
                     ListFooterComponent={this.renderFooter}
-                    renderItem={({item}) => <ProductDetailListItem item={item}/>}
+                    renderItem={({item}) => <StoreProductListItem item={item}/>}
                     keyExtractor={item => '' + item.id}
                     data={this.props.ProductStore.products}
                 />
@@ -61,3 +63,9 @@ export default class Home extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    flatList: {
+        flex: 1, alignItems: 'flex-start'
+    }
+});

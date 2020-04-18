@@ -10,7 +10,7 @@ import axios from "axios";
 import {API_BASE} from "../../constants";
 
 
-@inject('AuthStore')
+@inject('AuthStore', 'UserStore')
 export default class LoginForm extends Component {
     _handleSubmit = async (postData, bag) => {
         try {
@@ -18,15 +18,14 @@ export default class LoginForm extends Component {
             for (var k in postData) {
                 formData.append(k, postData[k])
             }
-            console.log(formData)
-            console.log(postData);
             const {data} = await axios.post(`${API_BASE}/login`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
                 alert(data.message)
                 return false;
             }
-            this.props.AuthStore.saveToken(data.data);
+            this.props.UserStore.addUserToSession(data.data.user);
+            this.props.AuthStore.saveToken(data.data.token);
         } catch (e) {
             alert(e)
         }
@@ -36,8 +35,8 @@ export default class LoginForm extends Component {
         return (
             <Formik
                 initialValues={{
-                    username: '',
-                    password: ''
+                    username: 'ferhat',
+                    password: '141277kk'
                 }}
                 onSubmit={this._handleSubmit}
                 validationSchema={validations}

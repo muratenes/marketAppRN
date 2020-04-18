@@ -16,9 +16,8 @@ import AuthLoading from "./screens/AuthLoading";
 import BasketList from "./screens/Basket/BasketList";
 import Profile from "./screens/Profile";
 import OrderList from "./screens/Order/OrderList";
-import {createStackNavigator} from "react-navigation-stack";
 import {ICON_SIZE} from "./constants";
-
+import {appStoreStack} from "./screens/StoreRouter";
 
 const appStack = createBottomTabNavigator({
     Home: {
@@ -48,7 +47,8 @@ const appStack = createBottomTabNavigator({
             tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
     },
-}, {headerLayoutPreset: 'center', initialRouteName: 'OrderList'});
+}, {headerLayoutPreset: 'center', initialRouteName: 'Home'});
+
 
 const authStack = createBottomTabNavigator({
     Login: {
@@ -75,11 +75,11 @@ const authStack = createBottomTabNavigator({
     }
 });
 
-
 const switchNavigator = createSwitchNavigator(
     {
         AutoLoading: AuthLoading,
         App: appStack,
+        StoreApp: appStoreStack,
         Auth: authStack
     }, {
         initialRouteName: 'AutoLoading'

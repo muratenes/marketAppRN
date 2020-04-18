@@ -7,6 +7,7 @@ import {API_BASE} from "../constants";
 class AuthStore {
     @observable token = null;
     @observable firebase_token = null;
+    @observable user = null;
 
     @action
     async saveToken(token) {
@@ -18,6 +19,7 @@ class AuthStore {
         }
     }
 
+
     @action
     async setupAuth() {
         await this.getToken();
@@ -26,6 +28,7 @@ class AuthStore {
     @action
     async removeToken() {
         await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('user')
         await this.getToken();
     }
 
@@ -38,7 +41,13 @@ class AuthStore {
                 return false;
             }
             this.token = token;
-            NavigationService.navigate('App')
+            const userData = JSON.parse(await AsyncStorage.getItem('user'));
+            if (userData.is_store) {
+                NavigationService.navigate('StoreApp')
+            }else{
+                NavigationService.navigate('App')
+            }
+
         } catch (e) {
             console.warn(e)
         }
