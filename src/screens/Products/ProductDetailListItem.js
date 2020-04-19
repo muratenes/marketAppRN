@@ -14,7 +14,7 @@ const ProductDetailListItem = ({item, index}) => (
     <TouchableOpacity onPress = {()=> this.addToBasket(item) }>
         <Card>
             <CardItem>
-                <Thumbnail source={{uri: item.image}}/>
+                <Thumbnail source={{uri: item.image_url}}/>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text note>{item.desc}</Text>
             </CardItem>

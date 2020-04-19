@@ -1,21 +1,42 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Content, Form, Item, Label, Input, Card, Picker, Button, Spinner, CheckBox, Body, Image, Thumbnail} from 'native-base';
+import {StyleSheet, View, Image} from 'react-native';
+import {Content, Item, Label, Input, Card, Picker, Button, Spinner, CheckBox, Body, Thumbnail, Text} from 'native-base';
 import {Formik} from "formik";
 import axios from "axios";
 import {API_BASE} from "../../../constants";
 import {convertToFormData, showAlertDialog} from "../../../helpers/helpers";
 import {inject} from "mobx-react";
-import NavigationService from "../../../NavigationService";
+import ImagePicker from "react-native-image-picker";
+
+const options = {
+    title: 'Fotoğraf Seç',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    }, allowsEditing: true
+};
 
 @inject('ProductStore')
 export default class StoreProductDetail extends Component {
+    state = {
+        avatarSource: null,
+        item: null
+    }
     static navigationOptions = ({navigation}) => {
         const item = navigation.getParam('item');
         return {
             title: `${item.title}`
         }
     };
+
+    componentDidMount(): void {
+        const item = this.props.navigation.getParam('item');
+        this.setState({
+            // avatarSource: item.image,
+            item: item
+        });
+    }
+
     _handleSubmit = async (getData, bag) => {
         const {goBack} = this.props.navigation;
         try {
@@ -35,17 +56,75 @@ export default class StoreProductDetail extends Component {
         }
     };
 
+    _onSelectPicture = () => {
+        ImagePicker.showImagePicker(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+
+
+
+                console.log(response)
+
+                this.uploadPhoto(response);
+            }
+        });
+    };
+
+    uploadPhoto = async response => {
+        const data = new FormData();
+        data.append('fileData', {
+            uri: response.uri,
+            type: response.type,
+            name: response.fileName
+        });
+
+        const config = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'multipart/form-data'
+            }
+        };
+
+        axios
+            .post(`${API_BASE}/store/uploadProductImage/${this.state.item.id}`, data, config)
+            .then(response => {
+                console.log(response.data);
+                if (response.data.status) {
+                    this.setState({
+                        avatarSource: null,
+                        item : response.data.data.product
+                    });
+                    this.props.ProductStore.getProducts()
+                } else {
+                    alert(response.data.message);
+                }
+            })
+            .catch(error => {
+                console.warn(error);
+            })
+
+    };
+
 
     render() {
         const item = this.props.navigation.getParam('item');
         return (
             <Content>
                 <Card style={{alignContent: 'center'}}>
-                    <View style={{flex: 10}}>
+                    <View style={{flex: 10, flexDirection: 'row'}}>
                         <View style={{flex: 5}}>
-                            <Thumbnail source={{uri: item.image}} style={{width: 200, height: 200}}/>
+                            {this.state.item !== null && <Thumbnail source={{uri: this.state.item.image_url}} style={{width: 200, height: 200}}/>}
                         </View>
-                        <View style={{flex: 5}}></View>
+                        <View style={{flex: 5}}>
+                            <Button onPress={this._onSelectPicture}>
+                                <Text>Yükle</Text>
+                            </Button>
+                        </View>
                     </View>
 
                 </Card>

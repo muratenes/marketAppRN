@@ -13,7 +13,7 @@ const BasketListItem = ({item, index}) => {
             <Card>
                 <CardItem style={{flex: 1}}>
                     <View style={{flex: 3}}>
-                        <Thumbnail source={{uri: item.product.image}}/>
+                        <Thumbnail source={{uri: item.product.image_url}}/>
                     </View>
                     <View style={{flex: 8}}>
                         <Text style={styles.title}>{item.product.title}</Text>

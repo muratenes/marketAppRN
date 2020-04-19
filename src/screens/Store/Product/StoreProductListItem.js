@@ -8,7 +8,7 @@ const StoreProductListItem = ({item}) => (
     <TouchableOpacity style={styles.card} onPress={() => NavigationService.navigate('StoreProductDetail',{ item }) }>
         <Card>
             <CardItem>
-                <Thumbnail source={{uri: item.image}}/>
+                <Thumbnail source={{uri: item.image_url}}/>
                 <Text style={styles.title}>{item.title}</Text>
             </CardItem>
             <CardItem>

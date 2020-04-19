@@ -16,8 +16,8 @@ export default class ProductList extends Component {
 
     componentDidMount(): void {
         this.props.ProductStore.getProducts();
-        //const item = {'title': 'Yumurta', 'price': 0.8, 'id': 1, 'discount_price': 0.6, 'status': true};
-        //NavigationService.navigate('StoreProductDetail', {item})
+        const item = {"id": 2, "title": "Yumurta", "active": 1, "price": "0.90", "discount_price": null, "image": "http://192.168.0.21:8000/uploads/products/yumurta.png"};
+        NavigationService.navigate('StoreProductDetail', {item})
 
     }
 
