@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import {Content, Item, Label, Input, Card, Picker, Button, Spinner, CheckBox, Body, Thumbnail, Text, Toast} from 'native-base';
 import {Formik} from "formik";
 import axios from "axios";
@@ -116,13 +116,13 @@ export default class StoreProductDetail extends Component {
             <Content>
                 {this.state.item &&
                 <Card style={{alignContent: 'center'}}>
-                    <View style={{flex: 10, flexDirection: 'row'}}>
-                        <View style={styles.productImageContainer}>
-                            {this.state.item !== null && <Thumbnail source={{uri: this.state.item.image_url}} style={styles.productImage}/>}
-                            {!this.state.item.image && !this.state.loading && <Icon name={'upload'} style={styles.uploadIcon} onPress={this._onSelectPicture}/>}
+                    <View style={{flex: 12, flexDirection: 'row'}}>
+                        <TouchableOpacity style={styles.productImageContainer} onPress={this._onSelectPicture}>
+                            {this.state.item.image !== "" && !this.state.loading &&  <Thumbnail source={{uri: this.state.item.image_url}} style={styles.productImage}/>}
+                            {this.state.item.image === "" && !this.state.loading && <Icon name={'upload'} style={styles.uploadIcon}/>}
                             {this.state.loading && <Image source={require('../../../assets/img/mini_loading.gif')} style={styles.productImageLoadingImage}/>}
-                        </View>
-                        <View style={{flex: 5}}>
+                        </TouchableOpacity>
+                        <View style={{flex: 6}}>
                             <Button onPress={this._onSelectPicture}>
                                 <Text>Yükle</Text>
                             </Button>
