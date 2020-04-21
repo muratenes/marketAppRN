@@ -2,6 +2,7 @@ import {action, observable, runInAction} from "mobx";
 import axios from "axios";
 import {API_BASE} from "../constants";
 import AsyncStorage from "@react-native-community/async-storage";
+import {showSuccessToastMessage} from "../helpers/helpers";
 
 
 class BasketStore {
@@ -32,6 +33,7 @@ class BasketStore {
         const {data} = await axios.post(`${API_BASE}/addToBasket/${productId}`, {qty})
         runInAction(() => {
             if (data.status) {
+                showSuccessToastMessage('Sepete Eklendi')
                 this.basket = data.data;
                 this.basketItems = data.data.items;
             } else {
@@ -88,6 +90,7 @@ class BasketStore {
         const {data} = await axios.delete(`${API_BASE}/removeFromBasket/${productId}`)
         runInAction(() => {
             if (data.status) {
+                showSuccessToastMessage('Ürün sepetten kaldırıldı')
                 this.basket = data.data;
                 this.basketItems = data.data.items;
             } else {

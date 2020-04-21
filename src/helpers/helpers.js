@@ -1,3 +1,6 @@
+import {Toast} from "native-base";
+import {ERROR_MESSAGE, SUCCESS_MESSAGE} from "../constants";
+
 export function showAlertDialog(apiResponseMessage) {
     if (apiResponseMessage instanceof String) {
         alert(apiResponseMessage)
@@ -21,4 +24,31 @@ export function convertToFormData(object) {
         formData.append(k, convertedObj)
     }
     return formData;
+}
+
+export function showSuccessToastMessage(message = SUCCESS_MESSAGE, duration = 600, buttonText = 'Tamam') {
+    Toast.show({
+        text: message,
+        buttonText: buttonText,
+        duration: duration,
+        type: "success"
+    });
+}
+
+export function showDangerToastMessage(message = ERROR_MESSAGE, duration = 1400, buttonText = 'Tamam') {
+    if (!(message instanceof String)) {
+        let responseMessage = '';
+        var index = 0;
+        for (var k in message) {
+            responseMessage += message[k] + (index !== 0 && index !== message.length ? " ----- " : '');
+            index++;
+        }
+        message = responseMessage
+    }
+    Toast.show({
+        text: message,
+        buttonText: buttonText,
+        duration: duration,
+        type: "danger"
+    });
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button, PushNotificationIOS} from 'react-native';
-
+import {Root} from 'native-base';
 import PushNotification from 'react-native-push-notification';
 import firebase from 'react-native-firebase';
 import {Provider} from "mobx-react";
@@ -13,13 +13,15 @@ import AuthStore from "./src/store/AuthStore";
 export default class App extends Component {
     render() {
         return (
-            <Provider {...store}>
-                <Router
-                    ref={navigatorRef => {
-                        NavigationService.setTopLevelNavigator(navigatorRef);
-                    }}
-                />
-            </Provider>
+            <Root>
+                <Provider {...store}>
+                    <Router
+                        ref={navigatorRef => {
+                            NavigationService.setTopLevelNavigator(navigatorRef);
+                        }}
+                    />
+                </Provider>
+            </Root>
         );
     }
 }

@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {Content, Item, Label, Input, Card, Picker, Button, Spinner, CheckBox, Body, Thumbnail, Text} from 'native-base';
+import {Content, Item, Label, Input, Card, Picker, Button, Spinner, CheckBox, Body, Thumbnail, Text, Toast} from 'native-base';
 import {Formik} from "formik";
 import axios from "axios";
 import {API_BASE} from "../../../constants";
-import {convertToFormData, showAlertDialog} from "../../../helpers/helpers";
+import {convertToFormData, showAlertDialog, showSuccessToastMessage, showDangerToastMessage} from "../../../helpers/helpers";
 import {inject} from "mobx-react";
 import ImagePicker from "react-native-image-picker";
+import {styles} from "./styles";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const options = {
     title: 'Fotoğraf Seç',
@@ -20,12 +22,14 @@ const options = {
 export default class StoreProductDetail extends Component {
     state = {
         avatarSource: null,
-        item: null
+        item: null,
+        loading: false
     }
     static navigationOptions = ({navigation}) => {
         const item = navigation.getParam('item');
+        let title = item.title !== "" ? item.title : 'Ürün Ekle'
         return {
-            title: `${item.title}`
+            title: `${title}`
         }
     };
 
@@ -67,7 +71,6 @@ export default class StoreProductDetail extends Component {
             } else {
 
 
-
                 console.log(response)
 
                 this.uploadPhoto(response);
@@ -76,6 +79,7 @@ export default class StoreProductDetail extends Component {
     };
 
     uploadPhoto = async response => {
+        this.setState({loading: true});
         const data = new FormData();
         data.append('fileData', {
             uri: response.uri,
@@ -83,42 +87,40 @@ export default class StoreProductDetail extends Component {
             name: response.fileName
         });
 
-        const config = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'multipart/form-data'
-            }
-        };
+        const config = {headers: {'Accept': 'application/json', 'Content-type': 'multipart/form-data'}};
 
-        axios
-            .post(`${API_BASE}/store/uploadProductImage/${this.state.item.id}`, data, config)
+        axios.post(`${API_BASE}/store/uploadProductImage/${this.state.item.id}`, data, config)
             .then(response => {
-                console.log(response.data);
+                this.setState({loading: false});
                 if (response.data.status) {
                     this.setState({
                         avatarSource: null,
-                        item : response.data.data.product
+                        item: response.data.data.product
                     });
                     this.props.ProductStore.getProducts()
+                    showSuccessToastMessage('Fotoğraf yüklendi')
                 } else {
-                    alert(response.data.message);
+                    showDangerToastMessage(response.data.message);
                 }
             })
             .catch(error => {
-                console.warn(error);
+                showDangerToastMessage(error, 1600);
             })
 
     };
 
 
     render() {
-        const item = this.props.navigation.getParam('item');
+        const item = this.state.item;
         return (
             <Content>
+                {this.state.item &&
                 <Card style={{alignContent: 'center'}}>
                     <View style={{flex: 10, flexDirection: 'row'}}>
-                        <View style={{flex: 5}}>
-                            {this.state.item !== null && <Thumbnail source={{uri: this.state.item.image_url}} style={{width: 200, height: 200}}/>}
+                        <View style={styles.productImageContainer}>
+                            {this.state.item !== null && <Thumbnail source={{uri: this.state.item.image_url}} style={styles.productImage}/>}
+                            {!this.state.item.image && !this.state.loading && <Icon name={'upload'} style={styles.uploadIcon} onPress={this._onSelectPicture}/>}
+                            {this.state.loading && <Image source={require('../../../assets/img/mini_loading.gif')} style={styles.productImageLoadingImage}/>}
                         </View>
                         <View style={{flex: 5}}>
                             <Button onPress={this._onSelectPicture}>
@@ -127,7 +129,8 @@ export default class StoreProductDetail extends Component {
                         </View>
                     </View>
 
-                </Card>
+                </Card>}
+                {this.state.item &&
                 <Formik
                     initialValues={{
                         title: item.title,
@@ -220,14 +223,8 @@ export default class StoreProductDetail extends Component {
                             </Content>
                         </Card>
                     )}
-                </Formik>
+                </Formik>}
             </Content>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    statusCheckBoxContainer: {
-        paddingVertical: 10, paddingRight: 10, flex: 10, flexDirection: 'row'
-    }, checkbox: {}
-});
