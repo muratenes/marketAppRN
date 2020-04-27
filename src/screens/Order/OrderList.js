@@ -7,7 +7,8 @@ import {inject, observer} from "mobx-react";
 import AuthLoading from "../AuthLoading";
 import Icon from "react-native-vector-icons/FontAwesome";
 import EmptyOrder from "./EmptyOrder";
-
+import OrderStore from "../../store/OrderStore";
+import {styles} from "../Store/Order/style";
 
 @inject("OrderStore")
 @observer
@@ -25,13 +26,14 @@ export default class OrderList extends Component {
             this.props.OrderStore.getOrders();
         });
     };
+
     render() {
         const {OrderStore} = this.props;
         if (OrderStore.loading === false) {
             return (
                 <Container>
                     <Navbar title={'Sepetim'}/>
-                    {OrderStore.orders.length > 0  && <Container>
+                    {OrderStore.orders.length > 0 && <Container>
                         <Content padder>
                             <Accordion
                                 refreshing={OrderStore.refreshing}
@@ -61,31 +63,39 @@ export default class OrderList extends Component {
 
     _renderContent(item) {
         const basketItemRender = item.basket.items.map(basketItemRender => (
-            <View style={styles.basketItem}>
-                <Text style={styles.basketItemText}>Ürün : {basketItemRender.product.title}</Text>
-                <Text style={styles.basketItemText}>Adet :{basketItemRender.qty}</Text>
-                <Text style={styles.basketItemText}>Toplam :{basketItemRender.total_price} ₺</Text>
+            <View style={styles.tableItemContainer}>
+                <View style={styles.tableContentItem}><Text>{basketItemRender.product.title}</Text></View>
+                <View style={styles.tableContentItem}><Text>{basketItemRender.qty}</Text></View>
+                <View style={styles.tableContentItem}><Text>{basketItemRender.total_price} ₺</Text></View>
             </View>
 
         ));
         return (
             <View style={{flex: 1, flexDirection: 'column'}}>
+                <View style={styles.tableHeaderContainer}>
+                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
+                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
+                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
+                </View>
                 {basketItemRender}
             </View>
         );
     }
 
     _renderHeader(item, expanded) {
+        const itemColors = OrderStore.statusList.find(elem => elem.name === item.status);
         return (
             <View style={{
                 flexDirection: "row",
                 padding: 14,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#f6f4f4"
+                backgroundColor: itemColors['backColor']
             }}>
                 <Text style={{fontWeight: "600"}}>
-                    {" "}{<Text>{item.created_at.substring(0, 10)} | {item.total_price} ₺ | {item.status_text}</Text>}
+                    {" "}{<Text
+                    style={{color: itemColors['color']}}>{item.created_at.substring(0, 10)} | {item.total_price} ₺
+                    | {item.status_text}</Text>}
                 </Text>
                 {expanded
                     ? <Icon style={{fontSize: 18}} name="angle-up"/>
@@ -94,11 +104,3 @@ export default class OrderList extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    basketItem: {
-        flex: 1, flexDirection: 'row', padding: 4
-    }, basketItemText: {
-        paddingVertical: 4, fontSize: 16, marginRight: 10
-    }
-})

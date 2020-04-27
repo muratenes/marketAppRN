@@ -13,6 +13,15 @@ class OrderStore {
     @observable STATUS_ONAYLANDI = 2;
     @observable STATUS_IPTAL = 3;
     @observable STATUS_TAMAMLANDI = 4;
+    @observable STATUS_BASARISIZ = 5;
+
+    @observable statusList = [
+        {name: this.STATUS_ALINDI, backColor: 'orange', 'color': 'black'},
+        {name: this.STATUS_ONAYLANDI, backColor: 'rgb(164,196,0)', 'color': 'black'},
+        {name: this.STATUS_IPTAL, backColor: '#e57373', 'color': 'white'},
+        {name: this.STATUS_TAMAMLANDI, backColor: '#8BC34A', 'color': 'black'},
+        {name: this.STATUS_BASARISIZ, backColor: '#d50000', 'color': 'white'},
+    ];
 
 
     @action
@@ -42,7 +51,7 @@ class OrderStore {
             if (data.status) {
                 this.orders = data.data;
                 alert(data.message)
-            }else{
+            } else {
                 alert(data.message)
             }
 
