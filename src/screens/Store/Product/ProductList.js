@@ -20,10 +20,10 @@ export default class ProductList extends Component {
     }
 
     componentDidMount(): void {
-        this.props.ProductStore.getProducts();
+        this.props.ProductStore.getStoreProducts();
         // const item = {"id": 2, "title": "Yumurta", "active": 1, "price": "0.90", "discount_price": null, "image": "http://192.168.0.21:8000/uploads/products/yumurta.png","image_url": "http://192.168.0.21:8000/uploads/products/yumurta.png"};
         // NavigationService.navigate('StoreProductDetail', {item})
-        this.redirectToAddNewProductPage()
+       // this.redirectToAddNewProductPage()
 
     }
 
@@ -32,7 +32,7 @@ export default class ProductList extends Component {
             page: 1,
             refreshing: true
         }, () => {
-            this.props.ProductStore.getProducts();
+            this.props.ProductStore.getStoreProducts();
         });
     };
 

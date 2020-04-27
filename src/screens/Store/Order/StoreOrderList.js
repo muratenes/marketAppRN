@@ -1,12 +1,12 @@
 import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import {Accordion, Container, Content, Text, View, Button} from "native-base";
-import EmptyOrder from "../../Order/EmptyOrder";
 import AuthLoading from "../../AuthLoading";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {styles} from "./style";
 import OrderStore from "../../../store/OrderStore";
 import StoreNavbar from "../../../components/StoreNavbar";
+import StoreEmptyOrder from "./StoreEmptyOrder";
 
 @inject("OrderStore")
 @observer
@@ -47,7 +47,7 @@ export default class StoreOrderList extends Component {
                         </Content>
                     </Container>}
                     {OrderStore.orders.length === 0 &&
-                    <EmptyOrder/>
+                    <StoreEmptyOrder/>
                     }
                 </Container>
             );

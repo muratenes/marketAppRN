@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase';
 import {Provider} from "mobx-react";
 import Router from "./src/Router";
 import NavigationService from "./src/NavigationService";
-import store from '../movieApp/src/store/';
+import store from './src/store/';
 import AuthStore from "./src/store/AuthStore";
 
 

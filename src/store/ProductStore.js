@@ -17,6 +17,16 @@ class ProductStore {
             this.products = data.data
         })
     }
+
+    @action
+    async getStoreProducts() {
+        this.loading = this.refreshing = true;
+        const {data} = await axios.get(`${API_BASE}/store/products`)
+        runInAction(() => {
+            this.loading = this.refreshing = false;
+            this.products = data.data
+        })
+    }
 }
 
 export default new ProductStore();

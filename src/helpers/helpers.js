@@ -19,8 +19,8 @@ export function convertToFormData(object) {
     var formData = new FormData();
     for (var k in object) {
         var convertedObj = object[k] === null ? "" : object[k];
-        convertedObj = convertedObj === "true" ? true : convertedObj
-        convertedObj = convertedObj === "false" ? false : convertedObj
+        convertedObj = (convertedObj === "true" || convertedObj === true) ? 1 : convertedObj
+        convertedObj = (convertedObj === "false" || convertedObj === false) ? 0 : convertedObj
         formData.append(k, convertedObj)
     }
     return formData;

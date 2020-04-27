@@ -28,7 +28,7 @@ class OrderStore {
     @action
     async getStoreOrders() {
         this.loading = this.refreshing = true;
-        const {data} = await axios.get(`${API_BASE}/store/getStoreOrders`)
+        const {data} = await axios.get(`${API_BASE}/store/orders`)
         runInAction(() => {
             this.loading = this.refreshing = false;
             this.orders = data.data
