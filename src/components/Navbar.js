@@ -3,6 +3,7 @@ import {Button, Container, Header, Title, Left, Text, Body, Right, Badge} from "
 import Icon from "react-native-vector-icons/FontAwesome";
 import {inject} from "mobx-react";
 import NavigationService from "../NavigationService";
+import {Linking} from 'react-native'
 import AsyncStorage from "@react-native-community/async-storage";
 
 
@@ -15,6 +16,7 @@ export default class Navbar extends Component {
 
     render() {
         const {BasketStore} = this.props;
+        const refUser = AsyncStorage.getItem('user');
         return (
             <Header>
                 <Left>
@@ -26,7 +28,7 @@ export default class Navbar extends Component {
                     <Title>{this.props.title}</Title>
                 </Body>
                 <Right>
-                    <Button transparent>
+                    <Button transparent onPress={()=> Linking.openURL(`tel:${refUser.phone}`)}>
                         <Icon name='phone' color={'white'} size={20}/>
                     </Button>
                     <Button transparent onPress={() => NavigationService.navigate('BasketList')}>
