@@ -90,11 +90,10 @@ export default class OrderList extends Component {
                 padding: 14,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: itemColors['backColor']
+                backgroundColor: "#f6f6f6"
             }}>
                 <Text style={{fontWeight: "600"}}>
-                    {" "}{<Text
-                    style={{color: itemColors['color']}}>{item.created_at.substring(0, 10)} | {item.total_price} ₺
+                    {" "}{<Text>{item.created_at.substring(0, 10)} | {item.total_price} ₺
                     | {item.status_text}</Text>}
                 </Text>
                 {expanded

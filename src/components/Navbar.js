@@ -5,18 +5,21 @@ import {inject} from "mobx-react";
 import NavigationService from "../NavigationService";
 import {Linking} from 'react-native'
 import AsyncStorage from "@react-native-community/async-storage";
+import AuthStore from "../store/AuthStore";
 
 
 @inject("AuthStore", "BasketStore")
 export default class Navbar extends Component {
 
+
     componentDidMount(): void {
         this.props.BasketStore.getBasket()
+       // this.props.AuthStore.getSessionUser()
     }
+
 
     render() {
         const {BasketStore} = this.props;
-        const refUser = AsyncStorage.getItem('user');
         return (
             <Header>
                 <Left>
@@ -28,9 +31,9 @@ export default class Navbar extends Component {
                     <Title>{this.props.title}</Title>
                 </Body>
                 <Right>
-                    <Button transparent onPress={()=> Linking.openURL(`tel:${refUser.phone}`)}>
+                    {this.props.AuthStore.user && <Button transparent onPress={() => Linking.openURL(`tel:${this.props.AuthStore.user.ref_user.phone}`)}>
                         <Icon name='phone' color={'white'} size={20}/>
-                    </Button>
+                    </Button>}
                     <Button transparent onPress={() => NavigationService.navigate('BasketList')}>
                         <Badge style={{position: 'absolute'}} danger><Text>{BasketStore.basketItems.length}</Text></Badge>
                         <Icon name='shopping-basket' color={'white'} size={20}/>

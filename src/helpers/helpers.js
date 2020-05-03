@@ -36,17 +36,39 @@ export function showSuccessToastMessage(message = SUCCESS_MESSAGE, duration = 60
 }
 
 export function showDangerToastMessage(message = ERROR_MESSAGE, duration = 1400, buttonText = 'Tamam') {
-    if (!(message instanceof String)) {
-        let responseMessage = '';
-        var index = 0;
-        for (var k in message) {
-            responseMessage += message[k] + (index !== 0 && index !== message.length ? " ----- " : '');
-            index++;
-        }
-        message = responseMessage
-    }
     Toast.show({
         text: message,
+        buttonText: buttonText,
+        duration: duration,
+        type: "danger"
+    });
+}
+
+export function showValidationToastMessage(validationError, duration = 1400, buttonText = 'Tamam') {
+    let responseMessage = "";
+    Object.keys(validationError).forEach(function (k) {
+        responseMessage += (validationError[k]);
+    });
+    Toast.show({
+        text: responseMessage,
+        buttonText: buttonText,
+        duration: duration,
+        type: "danger"
+    });
+}
+
+export function showErrorApiResponseToastMessage(apiResponse, duration = 1400, buttonText = 'Tamam') {
+    let responseMessage = "";
+    if (apiResponse.hasOwnProperty('validation_errors')) {
+        const validationError = apiResponse.validation_errors;
+        Object.keys(validationError).forEach(function (k) {
+            responseMessage += (validationError[k]);
+        });
+    } else {
+        responseMessage = apiResponse.message;
+    }
+    Toast.show({
+        text: responseMessage,
         buttonText: buttonText,
         duration: duration,
         type: "danger"

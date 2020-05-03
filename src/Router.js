@@ -47,7 +47,7 @@ const appStack = createBottomTabNavigator({
             tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
     },
-}, {headerLayoutPreset: 'center', initialRouteName: 'OrderList'});
+}, {headerLayoutPreset: 'center', initialRouteName: 'Home'});
 
 
 const authStack = createBottomTabNavigator({

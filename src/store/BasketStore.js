@@ -33,7 +33,6 @@ class BasketStore {
         const {data} = await axios.post(`${API_BASE}/addToBasket/${productId}`, {qty})
         runInAction(() => {
             if (data.status) {
-                showSuccessToastMessage('Sepete Eklendi')
                 this.basket = data.data;
                 this.basketItems = data.data.items;
             } else {
@@ -49,6 +48,7 @@ class BasketStore {
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
+                showSuccessToastMessage('sepet güncellendi')
             } else {
                 alert(data.message)
             }
@@ -90,7 +90,6 @@ class BasketStore {
         const {data} = await axios.delete(`${API_BASE}/removeFromBasket/${productId}`)
         runInAction(() => {
             if (data.status) {
-                showSuccessToastMessage('Ürün sepetten kaldırıldı')
                 this.basket = data.data;
                 this.basketItems = data.data.items;
             } else {

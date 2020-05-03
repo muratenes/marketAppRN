@@ -77,15 +77,15 @@ export default class StoreOrderList extends Component {
                     <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
                 </View>
                 {basketItemRender}
-                    <View style={styles.tableFooterContainer}>
-                        <Button small info style={styles.tableFooterApproveButton} disabled={item.status === OrderStore.STATUS_ONAYLANDI || item.status === OrderStore.STATUS_TAMAMLANDI}>
-                            <Text onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_ONAYLANDI)}>Onayla</Text>
-                        </Button>
-                        <Button small success style={styles.tableFooterCompleteButton} disabled={item.status === OrderStore.STATUS_TAMAMLANDI}
-                                onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_TAMAMLANDI)}>
-                            <Text>Tamamla </Text>
-                        </Button>
-                    </View>
+                <View style={styles.tableFooterContainer}>
+                    <Button small info style={styles.tableFooterApproveButton} disabled={item.status === OrderStore.STATUS_ONAYLANDI || item.status === OrderStore.STATUS_TAMAMLANDI}>
+                        <Text onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_ONAYLANDI)}>Onayla</Text>
+                    </Button>
+                    <Button small success style={styles.tableFooterCompleteButton} disabled={item.status === OrderStore.STATUS_TAMAMLANDI}
+                            onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_TAMAMLANDI)}>
+                        <Text>Tamamla </Text>
+                    </Button>
+                </View>
             </View>
         );
     }
@@ -95,16 +95,17 @@ export default class StoreOrderList extends Component {
     }
 
     _renderHeader(item, expanded) {
+        const itemColors = OrderStore.statusList.find(elem => elem.name === item.status);
         return (
             <View style={{
                 flexDirection: "row",
                 padding: 14,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#f6f4f4"
+                backgroundColor: itemColors['backColor']
             }}>
                 <Text style={{fontWeight: "600"}}>
-                    {" "}{<Text>{item.created_at.substring(5, 16)} | {item.total_price} ₺ | {item.status_text}</Text>}
+                       {<Text style={{color: itemColors['color']}}>{item.created_at.substring(5, 16)} | {item.total_price} ₺ | {item.status_text}</Text>}
                 </Text>
                 {expanded
                     ? <Icon style={{fontSize: 18}} name="angle-up"/>

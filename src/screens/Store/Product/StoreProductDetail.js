@@ -22,7 +22,7 @@ import {
     convertToFormData,
     showAlertDialog,
     showSuccessToastMessage,
-    showDangerToastMessage
+    showDangerToastMessage, showValidationToastMessage, showErrorApiResponseToastMessage
 } from "../../../helpers/helpers";
 import {inject} from "mobx-react";
 import ImagePicker from "react-native-image-picker";
@@ -63,16 +63,14 @@ export default class StoreProductDetail extends Component {
     _handleSubmit = async (getData, bag) => {
         const {goBack} = this.props.navigation;
         try {
-            console.log(getData)
             const requestData = convertToFormData(getData);
-            console.log(requestData)
             const productId = this.props.navigation.getParam('item').id;
             const {data} = await axios.post(`${API_BASE}/store/updateStoreProduct/${productId}`, requestData);
             if (data.status) {
                 this.props.ProductStore.products = data.data.products;
                 goBack();
             } else {
-                showDangerToastMessage(data.message);
+                showErrorApiResponseToastMessage(data)
             }
         } catch (e) {
             alert(e)

@@ -42,9 +42,10 @@ class AuthStore {
             }
             this.token = token;
             const userData = JSON.parse(await AsyncStorage.getItem('user'));
+            this.user = userData;
             if (userData.is_store) {
                 NavigationService.navigate('StoreApp')
-            }else{
+            } else {
                 NavigationService.navigate('App')
             }
 
@@ -71,6 +72,15 @@ class AuthStore {
             console.log('firebase token', this.firebase_token)
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    @action
+    async getSessionUser() {
+        try {
+            this.user = await AsyncStorage.getItem('firebase_token')
+        }catch (e) {
+
         }
     }
 }
