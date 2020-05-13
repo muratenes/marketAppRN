@@ -18,6 +18,8 @@ export default class Navbar extends Component {
     }
 
 
+
+
     render() {
         const {BasketStore} = this.props;
         return (

@@ -71,6 +71,14 @@ export default class StoreOrderList extends Component {
         ));
         return (
             <View style={{flex: 1, flexDirection: 'column'}}>
+                {item.note !== null && <View style={styles.tableHeaderContainer}>
+                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderNoteItemText}>Not</Text></View>
+                    <View style={styles.tableAddressContentItem}><Text style={styles.tableItemNoteText}>{item.note}</Text></View>
+                </View> }
+                <View style={styles.tableHeaderContainer}>
+                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Adres</Text></View>
+                    <View style={styles.tableAddressContentItem}><Text style={styles.tableItemAddressText}>{item.user.address}</Text></View>
+                </View>
                 <View style={styles.tableHeaderContainer}>
                     <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
                     <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
@@ -90,9 +98,6 @@ export default class StoreOrderList extends Component {
         );
     }
 
-    _completeOrder = (order) => {
-        alert('test')
-    }
 
     _renderHeader(item, expanded) {
         const itemColors = OrderStore.statusList.find(elem => elem.name === item.status);
@@ -107,9 +112,7 @@ export default class StoreOrderList extends Component {
                 <Text style={{fontWeight: "600"}}>
                        {<Text style={{color: itemColors['color']}}>{item.created_at.substring(5, 16)} | {item.total_price} ₺ | {item.status_text}</Text>}
                 </Text>
-                {expanded
-                    ? <Icon style={{fontSize: 18}} name="angle-up"/>
-                    : <Icon style={{fontSize: 18}} name="angle-down"/>}
+                {expanded ? <Icon style={{fontSize: 18}} name="angle-up"/> : <Icon style={{fontSize: 18}} name="angle-down"/>}
             </View>
         );
     }

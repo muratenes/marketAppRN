@@ -12,7 +12,10 @@ export const styles = StyleSheet.create({
         flex: 3, textAlign: 'center', paddingVertical: 4
     }, tableHeaderItemText: {
         fontWeight: 'bold'
-    }, tableItemContainer: {
+    },tableHeaderNoteItemText: {
+        fontWeight: 'bold',color:'#FFA000'
+    }
+    , tableItemContainer: {
         flex: 10, flexDirection: 'row', paddingVertical: 5,
         borderColor: '#e7e6e6', borderBottomWidth: 2, paddingHorizontal: 10
     }, tableContentItem: {
@@ -24,5 +27,11 @@ export const styles = StyleSheet.create({
         textAlign: 'center', justifyContent: 'center', flex: 1, marginRight: 3
     }, tableFooterCompleteButton: {
         textAlign: 'center', justifyContent: 'center', flex: 1
+    }, tableItemAddressText: {
+        fontSize: 12, color: '#424141', textAlign: 'left'
+    },tableItemNoteText: {
+        fontSize: 16, color: '#FFA000', textAlign: 'left'
+    }, tableAddressContentItem: {
+        flex: 7, textAlign: 'left', paddingVertical: 4
     }
 })

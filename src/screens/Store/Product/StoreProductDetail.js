@@ -28,13 +28,19 @@ import {inject} from "mobx-react";
 import ImagePicker from "react-native-image-picker";
 import {styles} from "./styles";
 import Icon from "react-native-vector-icons/FontAwesome";
+import NavigationService from "../../../NavigationService";
 
 const options = {
     title: 'Fotoğraf Seç',
+    takePhotoButtonTitle: 'Fotoğraf Çek',
+    chooseFromLibraryButtonTitle: 'Galeriden Seç',
+    cancelButtonTitle: 'İptal',
+    mediaType: 'photo',
     storageOptions: {
         skipBackup: true,
         path: 'images',
-    }, allowsEditing: true
+    },
+    allowsEditing: true
 };
 
 @inject('ProductStore')
@@ -68,7 +74,10 @@ export default class StoreProductDetail extends Component {
             const {data} = await axios.post(`${API_BASE}/store/updateStoreProduct/${productId}`, requestData);
             if (data.status) {
                 this.props.ProductStore.products = data.data.products;
-                goBack();
+                if (this.state.item.id == 0)
+                    NavigationService.navigate('StoreProductDetail', {item: data.data.product})
+                else
+                    goBack();
             } else {
                 showErrorApiResponseToastMessage(data)
             }
@@ -102,6 +111,8 @@ export default class StoreProductDetail extends Component {
 
         const config = {headers: {'Accept': 'application/json', 'Content-type': 'multipart/form-data'}};
         const {data} = await axios.post(`${API_BASE}/store/uploadProductImage/${this.state.item.id}`, formData, config);
+        console.log(formData);
+
         this.setState({loading: false});
         if (data.status) {
             this.setState({
@@ -111,8 +122,7 @@ export default class StoreProductDetail extends Component {
             await this.props.ProductStore.getStoreProducts()
             showSuccessToastMessage('Fotoğraf yüklendi');
         } else {
-            console.log(response.data)
-            alert(response.data.message);
+            showDangerToastMessage(data.message)
         }
     };
 

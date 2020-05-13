@@ -47,7 +47,7 @@ export default class BasketList extends Component {
             this.setState({loading: true})
             const {data} = await axios.post(`${API_BASE}/orders/create`, {orderNote: this.state.orderNote})
             if (!data.status) {
-                this.setState({loading: false,orderNote:''})
+                this.setState({loading: false, orderNote: ''})
                 alert(data.message)
             } else {
                 this.props.BasketStore.basket = data.data.basket
@@ -76,12 +76,14 @@ export default class BasketList extends Component {
                             <View style={{flex: this.state.accordionFlex === this.state.accordionFlexDefaultValue ? 9 : 2}}>
                                 <TouchableOpacity style={{flex: 10, flexDirection: 'row'}} onPress={() => this.showOrHideAccordion()}>
                                     <View style={{flex: 4}}><Text>Toplam Tutar : </Text></View>
-                                    <View style={{flex: 2}}><Text style={{fontWeight: 'bold'}}>{BasketStore.basket.total_price} ₺</Text></View>
+                                    <View style={{flex: 2}}><Text style={{fontSize: 15}}>{BasketStore.basket.total_price} ₺</Text></View>
                                     <View style={{flex: 4}}>
                                         {this.props.BasketStore.hasBasketItemQtyChange &&
-                                        <Button success small disabled={this.props.BasketStore.loading} onPress={() => this.props.BasketStore.updateBasketByBasketItems()}><Text> Güncelle </Text></Button>}
+                                        <Button success small disabled={this.props.BasketStore.loading}
+                                                onPress={() => this.props.BasketStore.updateBasketByBasketItems()}><Text> Güncelle </Text></Button>}
                                     </View>
-                                    <View style={{flex: 2, alignItems: 'flex-end', paddingVertical: 4}}><Icon name={this.state.accordionFlex != 4 ? 'arrow-down' : 'arrow-up'} size={15}></Icon></View>
+                                    <View style={{flex: 2, alignItems: 'flex-end', paddingVertical: 4}}><Icon name={this.state.accordionFlex != 4 ? 'arrow-down' : 'arrow-up'}
+                                                                                                              size={15}></Icon></View>
                                 </TouchableOpacity>
                             </View>
                             <View style={{flex: this.state.accordionFlex === this.state.accordionFlexDefaultValue ? 0 : 9}}>
@@ -92,7 +94,7 @@ export default class BasketList extends Component {
                                     </View>
                                     <View style={{flex: 1}}>
                                         {!this.props.BasketStore.loading &&
-                                         <Button success onPress={() => this.completeOrder()} disabled={!!this.state.loading}><Text> Siparişi Tamamla </Text></Button>
+                                        <Button success onPress={() => this.completeOrder()} disabled={!!this.state.loading}><Text> Siparişi Tamamla </Text></Button>
                                         }
                                     </View>
                                 </View>

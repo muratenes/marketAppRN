@@ -11,7 +11,7 @@ import {ScrollView} from 'react-native';
 import {API_BASE} from "../../constants";
 import AuthStore from "../../store/AuthStore";
 import AuthLoading from "../AuthLoading";
-import {showAlertDialog, showDangerToastMessage, showSuccessToastMessage} from "../../helpers/helpers";
+import {showAlertDialog, showDangerToastMessage, showErrorApiResponseToastMessage, showSuccessToastMessage} from "../../helpers/helpers";
 
 @inject('UserStore')
 @observer
@@ -24,9 +24,8 @@ export default class Profile extends Component {
                 formData.append(k, getData[k])
             }
             const {data} = await axios.post(`${API_BASE}/saveUserDetail`, formData);
-            console.log(data )
             if (!data.status) {
-                showDangerToastMessage(data.message)
+                showErrorApiResponseToastMessage(data)
                 return false;
             }
             showSuccessToastMessage(data.message)

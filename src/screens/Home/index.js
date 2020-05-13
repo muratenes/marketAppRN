@@ -14,6 +14,7 @@ export default class Home extends Component {
 
     state = {
         text: '',
+        all_products: []
     }
 
     constructor(props) {
@@ -21,8 +22,9 @@ export default class Home extends Component {
         this.textRef = React.createRef();
     }
 
-    componentDidMount(): void {
-        this.props.ProductStore.getProducts();
+    async componentDidMount(): void {
+        await this.props.ProductStore.getProducts();
+        this.setState({all_products: this.props.ProductStore.products})
         //this.props.UserStore.getUserFromSession();
     }
 
@@ -46,13 +48,20 @@ export default class Home extends Component {
     };
 
     _clearInputText = () => {
+        console.log('kapandı');
         this.setState({text: ''});
-        Keyboard.dismiss
+        this.props.ProductStore.products = this.state.all_products;
+        Keyboard.dismiss()
     }
 
     _onChangeText = (text) => {
-        const newData = d
-        this.setState({text});
+        this.setState({text})
+        const newData = this.state.all_products.filter(item => {
+            const listItem = `${item.title.toLowerCase()}`;
+
+            return listItem.indexOf(text.toLowerCase()) > -1;
+        });
+        this.props.ProductStore.products = newData;
     }
 
     render() {
@@ -68,8 +77,8 @@ export default class Home extends Component {
                         <Icon name="search" size={23}/>
                         <Input
                             ref={this.textRef}
-                            placeholder="kola,süt,ekmek vb." onChangeText={text => this._onChangeText} value={this.state.text}/>
-                        {this.state.text.length > 0 && <Icon name="close" size={30} onPress={(text) => this._clearInputText}/>}
+                            placeholder="kola,süt,ekmek vb." onChangeText={text => this._onChangeText(text)} value={this.state.text}/>
+                        {this.state.text.length > 0 && <Icon name="close" size={30} onPress={this._clearInputText}/>}
                     </Item>
                     <Button transparent>
                         <Text>Search</Text>
