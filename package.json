@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "formik": "^2.1.4",
     "jetifier": "^1.6.5",
+    "laravel-echo": "^1.7.0",
     "mobx": "^5.15.4",
     "mobx-react": "^5.4.4",
     "native-base": "^2.13.12",

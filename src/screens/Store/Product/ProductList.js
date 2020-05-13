@@ -8,6 +8,7 @@ import StoreProductListItem from "./StoreProductListItem";
 import StoreNavbar from "../../../components/StoreNavbar";
 import NavigationService from "../../../NavigationService";
 import Icon from "react-native-vector-icons/FontAwesome";
+import RealTimeTest from "../../../components/realTimeTest";
 
 
 @inject("ProductStore", "UserStore")
@@ -60,15 +61,16 @@ export default class ProductList extends Component {
                     />
                 }>
                     <StoreNavbar title={'Ürünlerim'}/>
-                    <FlatList
-                        columnWrapperStyle={{justifyContent: 'space-between'}}
-                        horizontal={false}
-                        numColumns={2}
-                        ListFooterComponent={this.renderFooter}
-                        renderItem={({item}) => <StoreProductListItem item={item}/>}
-                        keyExtractor={item => '' + item.id}
-                        data={this.props.ProductStore.products}
-                    />
+                    <RealTimeTest/>
+                    {/*<FlatList*/}
+                    {/*    columnWrapperStyle={{justifyContent: 'space-between'}}*/}
+                    {/*    horizontal={false}*/}
+                    {/*    numColumns={2}*/}
+                    {/*    ListFooterComponent={this.renderFooter}*/}
+                    {/*    renderItem={({item}) => <StoreProductListItem item={item}/>}*/}
+                    {/*    keyExtractor={item => '' + item.id}*/}
+                    {/*    data={this.props.ProductStore.products}*/}
+                    {/*/>*/}
                 </ScrollView>
                 <Fab
                     active={this.state.active}
