@@ -7,6 +7,7 @@ class OrderStore {
     @observable orders = [];
     @observable loading = false;
     @observable refreshing = false;
+    @observable pendingOrderCount = 0;
 
     // const
     @observable STATUS_ALINDI = 1;
@@ -19,7 +20,7 @@ class OrderStore {
         {name: this.STATUS_ALINDI, backColor: 'orange', 'color': 'black'},
         {name: this.STATUS_ONAYLANDI, backColor: 'rgb(164,196,0)', 'color': 'black'},
         {name: this.STATUS_IPTAL, backColor: '#e57373', 'color': 'white'},
-        {name: this.STATUS_TAMAMLANDI, backColor: '#8BC34A', 'color': 'black'},
+        {name: this.STATUS_TAMAMLANDI, backColor: '#6b9037', 'color': 'black'},
         {name: this.STATUS_BASARISIZ, backColor: '#d50000', 'color': 'white'},
     ];
 
@@ -45,16 +46,33 @@ class OrderStore {
     }
 
     @action
+    async setOrders(orders) {
+        this.loading = this.refreshing = true;
+        runInAction(() => {
+            this.loading = this.refreshing = false;
+            this.orders = orders
+        })
+    }
+
+    @action
     async updateOrderStatus(orderId, status) {
         const {data} = await axios.post(`${API_BASE}/store/updateOrderStatus`, {order_id: orderId, status: status})
         runInAction(() => {
             if (data.status) {
-                this.orders = data.data;
+                this.orders = data.data.orders;
+                this.pendingOrderCount = data.data.pendingOrderCount;
                 alert(data.message)
             } else {
                 alert(data.message)
             }
 
+        })
+    }
+
+    @action
+    async setPendingOrderCount(pendingOrderCount) {
+        runInAction(() => {
+            this.pendingOrderCount = pendingOrderCount;
         })
     }
 }

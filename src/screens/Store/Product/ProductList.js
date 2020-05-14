@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, ScrollView, View, RefreshControl, StyleSheet} from 'react-native';
 import {inject, observer} from "mobx-react";
-import {Fab, Button} from 'native-base';
+import {Fab, Button,Text} from 'native-base';
 
 
 import StoreProductListItem from "./StoreProductListItem";
@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import RealTimeTest from "../../../components/realTimeTest";
 
 
-@inject("ProductStore", "UserStore")
+@inject("ProductStore", "UserStore","OrderStore")
 @observer
 export default class ProductList extends Component {
 
@@ -62,15 +62,15 @@ export default class ProductList extends Component {
                 }>
                     <StoreNavbar title={'Ürünlerim'}/>
                     <RealTimeTest/>
-                    {/*<FlatList*/}
-                    {/*    columnWrapperStyle={{justifyContent: 'space-between'}}*/}
-                    {/*    horizontal={false}*/}
-                    {/*    numColumns={2}*/}
-                    {/*    ListFooterComponent={this.renderFooter}*/}
-                    {/*    renderItem={({item}) => <StoreProductListItem item={item}/>}*/}
-                    {/*    keyExtractor={item => '' + item.id}*/}
-                    {/*    data={this.props.ProductStore.products}*/}
-                    {/*/>*/}
+                    <FlatList
+                        columnWrapperStyle={{justifyContent: 'space-between'}}
+                        horizontal={false}
+                        numColumns={2}
+                        ListFooterComponent={this.renderFooter}
+                        renderItem={({item}) => <StoreProductListItem item={item}/>}
+                        keyExtractor={item => '' + item.id}
+                        data={this.props.ProductStore.products}
+                    />
                 </ScrollView>
                 <Fab
                     active={this.state.active}
