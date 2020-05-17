@@ -30,7 +30,6 @@ class UserStore {
     async getUserFromSession() {
         try {
             this.sessionUser = await JSON.parse(AsyncStorage.getItem('user'))
-            console.log(this.sessionUser)
         } catch (e) {
             return null;
         }

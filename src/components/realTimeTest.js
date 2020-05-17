@@ -7,26 +7,24 @@ import Echo from 'laravel-echo/dist/echo';
 import Socketio from 'socket.io-client';
 import AuthStore from "../store/AuthStore";
 import OrderStore from "../store/OrderStore";
+import UserStore from "../store/UserStore";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class realTimeTest extends Component {
     state = {
         onlineCount: 0,
-        color: '#f1f1f1'
+        color: '#f1f1f1',
+        user : null
     };
 
-    constructor(props) {
-        super(props);
+
+    async componentDidMount() {
         const localIp = "192.168.0.21";
         let channelName = 'user-channel';
         let eventName = '.UserEvent';
-        const user = {
-            "id": 1,
-            "name": "ferhat",
-            "email": "ahmet@gmail.com",
-            "email_verified_at": null,
-            "created_at": "2020-05-12T20:20:27.000000Z",
-            "updated_at": "2020-05-12T20:20:27.000000Z"
-        };
+        let user = await AsyncStorage.getItem('user');
+        user = JSON.parse(user)
+        console.log(user.id)
         let echo = new Echo({
             broadcaster: 'socket.io',
             host: `http://${localIp}:6001`,
