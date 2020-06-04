@@ -9,31 +9,31 @@ import AuthStore from "../store/AuthStore";
 import OrderStore from "../store/OrderStore";
 import UserStore from "../store/UserStore";
 import AsyncStorage from "@react-native-community/async-storage";
+import {REDIS_IP, REDIS_PORT} from "../constants";
 
 export default class realTimeTest extends Component {
     state = {
         onlineCount: 0,
         color: '#f1f1f1',
-        user : null
+        user: null
     };
+
+    constructor() {
+        super();
+    }
 
 
     async componentDidMount() {
-        const localIp = "192.168.0.21";
-        let channelName = 'user-channel';
-        let eventName = '.UserEvent';
         let user = await AsyncStorage.getItem('user');
         user = JSON.parse(user)
-        console.log(user.id)
         let echo = new Echo({
             broadcaster: 'socket.io',
-            host: `http://${localIp}:6001`,
+            host: `http://${REDIS_IP}:${REDIS_PORT}`,
             client: Socketio,
             auth: {headers: {Authorization: "Bearer " + AuthStore.token}}
         });
-
-        echo.private('user.' + user.id)
-            .listen('PrivateEvent', (data) => {
+        echo.private('store.' + user.id)
+            .listen('NewOrderAddedEvent', (data) => {
                 console.log(data)
                 OrderStore.setPendingOrderCount(data.pendingOrderCount);
                 OrderStore.getStoreOrders()
@@ -50,7 +50,7 @@ export default class realTimeTest extends Component {
 
     render() {
         return (
-           <View></View>
+            <View></View>
         );
     }
 }

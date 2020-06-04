@@ -8,7 +8,6 @@ import StoreProductListItem from "./StoreProductListItem";
 import StoreNavbar from "../../../components/StoreNavbar";
 import NavigationService from "../../../NavigationService";
 import Icon from "react-native-vector-icons/FontAwesome";
-import RealTimeTest from "../../../components/realTimeTest";
 
 
 @inject("ProductStore", "UserStore","OrderStore")
@@ -61,7 +60,6 @@ export default class ProductList extends Component {
                     />
                 }>
                     <StoreNavbar title={'Ürünlerim'}/>
-                    <RealTimeTest/>
                     <FlatList
                         columnWrapperStyle={{justifyContent: 'space-between'}}
                         horizontal={false}

@@ -10,6 +10,7 @@ import store from './src/store/';
 import AuthStore from "./src/store/AuthStore";
 import PushNotificationAndroid from 'react-native-push-notification'
 import FirebaseService from './src/FirebaseService'
+import SocketService from "./src/SocketService";
 
 export default class App extends Component {
     componentDidMount() {
@@ -30,5 +31,6 @@ export default class App extends Component {
         );
     }
 }
+SocketService.storeOrderSocketIoInitialize();
 FirebaseService.checkFirebasePermissions()
 FirebaseService.firebaseInitalize()
