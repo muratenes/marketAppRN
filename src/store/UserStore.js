@@ -22,7 +22,7 @@ class UserStore {
             await AsyncStorage.setItem('user', JSON.stringify(userData))
             this.sessionUser = await AsyncStorage.getItem('user');
         } catch (e) {
-            console.log(e)
+            console.log('hata27',e)
         }
     }
 

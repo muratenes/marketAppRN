@@ -2,7 +2,7 @@ import {action, observable} from "mobx";
 import AsyncStorage from "@react-native-community/async-storage";
 import NavigationService from "../NavigationService";
 import axios from "axios";
-import {API_BASE} from "../constants";
+import {API_BASE, ROLE_STORE, ROLE_STORE_WORKER} from "../constants";
 
 class AuthStore {
     @observable token = null;
@@ -43,14 +43,15 @@ class AuthStore {
             this.token = token;
             const userData = JSON.parse(await AsyncStorage.getItem('user'));
             this.user = userData;
-            if (userData.is_store) {
+            console.log(userData)
+            if (userData.role_id == ROLE_STORE_WORKER || userData.role_id == ROLE_STORE) {
                 NavigationService.navigate('StoreApp')
             } else {
                 NavigationService.navigate('App')
             }
 
         } catch (e) {
-            console.warn(e)
+            console.log(e)
         }
     }
 

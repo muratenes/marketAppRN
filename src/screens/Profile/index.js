@@ -23,6 +23,7 @@ export default class Profile extends Component {
             for (var k in getData) {
                 formData.append(k, getData[k])
             }
+            console.log(formData)
             const {data} = await axios.post(`${API_BASE}/saveUserDetail`, formData);
             if (!data.status) {
                 showErrorApiResponseToastMessage(data)
@@ -30,7 +31,7 @@ export default class Profile extends Component {
             }
             showSuccessToastMessage(data.message)
         } catch (e) {
-            showDangerToastMessage(e)
+            // showDangerToastMessage(e)
         }
     };
 
@@ -49,7 +50,7 @@ export default class Profile extends Component {
                         initialValues={{
                             username: user.username,
                             password: '',
-                            c_password: '',
+                            password_confirmation: '',
                             name: user.name,
                             phone: user.phone,
                             address: user.address,
@@ -102,20 +103,20 @@ export default class Profile extends Component {
                                     <Text style={{color: 'red'}}>{errors.password}</Text>}
                                 </Item>
 
-                                <Item error={errors.c_password && touched.c_password} stackedLabel>
+                                <Item error={errors.password_confirmation && touched.password_confirmation} stackedLabel>
                                     <Label>Parola Tekrar</Label>
                                     <Input
-                                        ref={ref => this.c_password = ref}
+                                        ref={ref => this.password_confirmation = ref}
                                         returnKeyType={'go'}
-                                        onChangeText={handleChange('c_password')}
+                                        onChangeText={handleChange('password_confirmation')}
                                         value={values.c_password}
-                                        onBlur={() => setFieldTouched('c_password')}
+                                        onBlur={() => setFieldTouched('password_confirmation')}
                                         autoCapitalize={'none'}
                                         secureTextEntry={true}
                                     />
 
-                                    {(errors.c_password && touched.c_password) &&
-                                    <Text style={{color: 'red'}}>{errors.c_password}</Text>}
+                                    {(errors.password_confirmation && touched.password_confirmation) &&
+                                    <Text style={{color: 'red'}}>{errors.password_confirmation}</Text>}
                                 </Item>
                                 <Item error={errors.name && touched.name} stackedLabel>
                                     <Label>Ad Soyad</Label>

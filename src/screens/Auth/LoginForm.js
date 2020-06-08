@@ -24,8 +24,8 @@ export default class LoginForm extends Component {
                 alert(data.message)
                 return false;
             }
-            this.props.UserStore.addUserToSession(data.data.user);
-            this.props.AuthStore.saveToken(data.data.token);
+            await this.props.UserStore.addUserToSession(data.data.user);
+            await this.props.AuthStore.saveToken(data.data.token);
         } catch (e) {
             alert(e)
         }

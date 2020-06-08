@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Button, Content, Input, Item, Spinner, Text, Textarea, Picker} from "native-base";
+import {Button, Content, Input, Item, Spinner, Text, Textarea, Picker, Toast} from "native-base";
 
 import {Formik} from "formik";
 
@@ -8,17 +8,23 @@ import {Formik} from "formik";
 import validations from './registerValidation';
 import {inject, observer} from "mobx-react";
 import axios from 'axios';
-import {API_BASE} from "../../constants";
-import AuthStore from "../../store/AuthStore";
-import AuthLoading from "../AuthLoading";
+import {API_BASE, ERROR_MESSAGE} from "../../constants";
 import {showAlertDialog} from '../../helpers/helpers';
 
 
-@inject('AuthStore', 'CompanyStore')
+@inject('AuthStore', 'CompanyStore','UserStore')
 @observer
 export default class RegisterForm extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            validatedStoreCode: false
+        }
+    }
+
     _handleSubmit = async (getData, bag) => {
+        // await AuthStore.removeToken()
         try {
             var formData = new FormData();
             for (var k in getData) {
@@ -30,188 +36,194 @@ export default class RegisterForm extends Component {
                 showAlertDialog(data.message)
                 return false;
             }
-            AuthStore.saveToken(data.data.token)
+            await this.props.UserStore.addUserToSession(data.data.user);
+            await this.props.AuthStore.saveToken(data.data.token)
         } catch (e) {
-            console.warn(e)
-            console.log(e)
             alert(e)
         }
     };
 
-    componentDidMount(): void {
-        this.props.CompanyStore.getCompanies()
+    checkCompanyCode = async value => {
+        if (value.length === 6) {
+            const {data} = await axios.post(`${API_BASE}/not-auth/checkStoreCode/${value}`);
+            if (data.status) {
+                this.setState({validatedStoreCode: true})
+                alert(data.message)
+            } else {
+                Toast.show({
+                    text: data.message,
+                    buttonText: "Tamam",
+                    buttonTextStyle: {color: "#008000"},
+                    buttonStyle: {backgroundColor: "#5cb85c"},
+                    duration: 1500
+                })
+            }
+        }
     }
 
-
     render() {
-        const {CompanyStore} = this.props;
         {
-            if (CompanyStore.companies.length > 0) {
-                return (
-                    <Formik
-                        initialValues={{
-                            username: '',
-                            password: '',
-                            c_password: '',
-                            name: '',
-                            ref_user: '',
-                            phone: '',
-                            address: '',
-                        }}
-                        onSubmit={this._handleSubmit}
-                        validationSchema={validations}
-                    >
-                        {({
-                              values,
-                              handleChange,
-                              handleSubmit,
-                              errors,
-                              touched,
-                              setFieldTouched,
-                              isValid,
-                              isSubmitting,
-                              setFieldValue
-                          }) => (
-                            <Content style={{padding: 10}}>
-                                <Item error={errors.username && touched.username}>
-                                    <Input
-                                        returnKeyType={'next'}
-                                        onSubmitEditing={() => this.passwordRef._root.focus()}
-                                        onChangeText={handleChange('username')}
-                                        value={values.username}
-                                        placeholder='Kullanıcı Adı'
-                                        onBlur={() => setFieldTouched('username')}
-                                        autoCorrect={false}
-                                        autoCapitalize={'none'}
-                                    />
+            return (
+                <Formik
+                    initialValues={{
+                        username: 'berkay',
+                        password: '141277kk',
+                        c_password: '141277kk',
+                        name: 'berkay yahya',
+                        phone: '5310129339',
+                        address: 'beyazçam 59',
+                        store_code: '111111'
+                    }}
+                    onSubmit={this._handleSubmit}
+                    validationSchema={validations}
+                >
+                    {({
+                          values,
+                          handleChange,
+                          handleSubmit,
+                          errors,
+                          touched,
+                          setFieldTouched,
+                          isValid,
+                          isSubmitting,
+                          setFieldValue,
+                          handleBlur
+                      }) => (
+                        <Content style={{padding: 10}}>
+                            <Item error={errors.store_code && touched.store_code}>
+                                <Input
+                                    returnKeyType={'next'}
+                                    ref={ref => this.code = ref}
+                                    onSubmitEditing={() => this.username._root.focus()}
+                                    onChangeText={value => {
+                                        setFieldValue('store_code', value);
+                                        this.checkCompanyCode(value); // calling custom onChangeText
+                                    }}
+                                    onBlur={() => setFieldTouched('store_code')}
+                                    value={values.store_code}
+                                    placeholder='Mağaza kodu'
+                                    autoCapitalize='characters'
+                                    maxLength={6}
+                                />
 
-                                    {(errors.username && touched.username) &&
-                                    <Text style={{color: 'red'}}>{errors.username}</Text>}
-                                </Item>
+                                {(errors.store_code && touched.store_code) &&
+                                <Text style={{color: 'red'}}>{errors.store_code}</Text>}
+                            </Item>
+                            <Item error={errors.username && touched.username}>
+                                <Input
+                                    ref={ref => this.username = ref}
+                                    returnKeyType={'next'}
+                                    onSubmitEditing={() => this.passwordRef._root.focus()}
+                                    onChangeText={handleChange('username')}
+                                    value={values.username}
+                                    placeholder='Kullanıcı Adı'
+                                    onBlur={() => setFieldTouched('username')}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                />
 
-                                <Item error={errors.password && touched.password}>
-                                    <Input
-                                        ref={ref => this.passwordRef = ref}
-                                        returnKeyType={'next'}
-                                        onSubmitEditing={() => this.c_password._root.focus()}
-                                        onChangeText={handleChange('password')}
-                                        value={values.password}
-                                        placeholder='Parola'
-                                        onBlur={() => setFieldTouched('password')}
-                                        autoCapitalize={'none'}
-                                        secureTextEntry={true}
-                                    />
+                                {(errors.username && touched.username) &&
+                                <Text style={{color: 'red'}}>{errors.username}</Text>}
+                            </Item>
 
-                                    {(errors.password && touched.password) &&
-                                    <Text style={{color: 'red'}}>{errors.password}</Text>}
-                                </Item>
+                            <Item error={errors.password && touched.password}>
+                                <Input
+                                    ref={ref => this.passwordRef = ref}
+                                    returnKeyType={'next'}
+                                    onSubmitEditing={() => this.c_password._root.focus()}
+                                    onChangeText={handleChange('password')}
+                                    value={values.password}
+                                    placeholder='Parola'
+                                    onBlur={() => setFieldTouched('password')}
+                                    autoCapitalize={'none'}
+                                    secureTextEntry={true}
+                                />
 
-                                <Item error={errors.c_password && touched.c_password}>
-                                    <Input
-                                        ref={ref => this.c_password = ref}
-                                        onSubmitEditing={() => this.name._root.focus()}
-                                        returnKeyType={'next'}
-                                        onChangeText={handleChange('c_password')}
-                                        value={values.c_password}
-                                        placeholder='Parola tekrar'
-                                        onBlur={() => setFieldTouched('c_password')}
-                                        autoCapitalize={'none'}
-                                        secureTextEntry={true}
-                                    />
+                                {(errors.password && touched.password) &&
+                                <Text style={{color: 'red'}}>{errors.password}</Text>}
+                            </Item>
 
-                                    {(errors.c_password && touched.c_password) &&
-                                    <Text style={{color: 'red'}}>{errors.c_password}</Text>}
-                                </Item>
-                                <Item error={errors.name && touched.name}>
-                                    <Input
-                                        ref={ref => this.name = ref}
-                                        onSubmitEditing={() => this.phone._root.focus()}
-                                        returnKeyType={'next'}
-                                        onChangeText={handleChange('name')}
-                                        value={values.name}
-                                        placeholder='Ad & Soyad'
-                                        onBlur={() => setFieldTouched('name')}
-                                        autoCorrect={false}
-                                        autoCapitalize={'none'}
-                                    />
+                            <Item error={errors.c_password && touched.c_password}>
+                                <Input
+                                    ref={ref => this.c_password = ref}
+                                    onSubmitEditing={() => this.name._root.focus()}
+                                    returnKeyType={'next'}
+                                    onChangeText={handleChange('c_password')}
+                                    value={values.c_password}
+                                    placeholder='Parola tekrar'
+                                    onBlur={() => setFieldTouched('c_password')}
+                                    autoCapitalize={'none'}
+                                    secureTextEntry={true}
+                                />
 
-                                    {(errors.name && touched.name) &&
-                                    <Text style={{color: 'red'}}>{errors.name}</Text>}
-                                </Item>
-                                <Item error={errors.phone && touched.phone}>
-                                    <Input
-                                        ref={ref => this.phone = ref}
-                                        onSubmitEditing={() => this.address._root.focus()}
-                                        returnKeyType={'next'}
-                                        onChangeText={handleChange('phone')}
-                                        value={values.phone}
-                                        placeholder='Telefon'
-                                        onBlur={() => setFieldTouched('phone')}
-                                        autoCorrect={false}
-                                        keyboardType="numeric"
-                                        autoCapitalize={'none'}
-                                    />
+                                {(errors.c_password && touched.c_password) &&
+                                <Text style={{color: 'red'}}>{errors.c_password}</Text>}
+                            </Item>
+                            <Item error={errors.name && touched.name}>
+                                <Input
+                                    ref={ref => this.name = ref}
+                                    onSubmitEditing={() => this.phone._root.focus()}
+                                    returnKeyType={'next'}
+                                    onChangeText={handleChange('name')}
+                                    value={values.name}
+                                    placeholder='Ad & Soyad'
+                                    onBlur={() => setFieldTouched('name')}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                />
 
-                                    {(errors.phone && touched.phone) &&
-                                    <Text style={{color: 'red'}}>{errors.phone}</Text>}
-                                </Item>
-                                <Item error={errors.address && touched.address}>
-                                    <Input
-                                        ref={ref => this.address = ref}
-                                        onSubmitEditing={() => this.ref_user._root.focus()}
-                                        returnKeyType={'next'}
-                                        onChangeText={handleChange('address')}
-                                        value={values.address}
-                                        multiline={true}
-                                        numberOfLines={5}
-                                        placeholder='Adres bilgisi'
-                                        onBlur={() => setFieldTouched('address')}
-                                        autoCorrect={false}
-                                    />
+                                {(errors.name && touched.name) &&
+                                <Text style={{color: 'red'}}>{errors.name}</Text>}
+                            </Item>
+                            <Item error={errors.phone && touched.phone}>
+                                <Input
+                                    ref={ref => this.phone = ref}
+                                    onSubmitEditing={() => this.address._root.focus()}
+                                    returnKeyType={'next'}
+                                    onChangeText={handleChange('phone')}
+                                    value={values.phone}
+                                    placeholder='Telefon'
+                                    maxLength={10}
+                                    onBlur={() => setFieldTouched('phone')}
+                                    autoCorrect={false}
+                                    keyboardType="numeric"
+                                    autoCapitalize={'none'}
+                                />
 
-                                    {(errors.address && touched.address) &&
-                                    <Text style={{color: 'red'}}>{errors.address}</Text>}
-                                </Item>
-                                <Item error={errors.ref_user && touched.ref_user}>
-                                    <Picker
-                                        returnKeyType={'go'}
-                                        style={{height: 50, width: 150}}
-                                        keyExtractor={item => ''+item.id}
-                                        selectedValue={values.ref_user}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setFieldValue('ref_user', itemValue)
-                                            this.setState({ref_user: itemValue})
-                                        }}
-                                        onBlur={() => setFieldTouched('ref_user')}
-                                    >
-                                        <Picker.Item label="--Sütçü Seçiniz--" value=""/>
-                                        {
-                                            CompanyStore.companies.map((v) => {
-                                                return <Picker.Item label={v.name} value={v.id}/>
-                                            })
-                                        }
-                                    </Picker>
+                                {(errors.phone && touched.phone) &&
+                                <Text style={{color: 'red'}}>{errors.phone}</Text>}
+                            </Item>
+                            <Item error={errors.address && touched.address}>
+                                <Input
+                                    ref={ref => this.address = ref}
+                                    onSubmitEditing={() => this.ref_user._root.focus()}
+                                    returnKeyType={'next'}
+                                    onChangeText={handleChange('address')}
+                                    value={values.address}
+                                    multiline={true}
+                                    numberOfLines={5}
+                                    placeholder='Adres bilgisi'
+                                    onBlur={() => setFieldTouched('address')}
+                                    autoCorrect={false}
+                                />
 
-                                    {(errors.ref_user && touched.ref_user) &&
-                                    <Text style={{color: 'red'}}>{errors.ref_user}</Text>}
-                                </Item>
+                                {(errors.address && touched.address) &&
+                                <Text style={{color: 'red'}}>{errors.address}</Text>}
+                            </Item>
 
-                                <Button
-                                    block
-                                    disabled={!isValid || isSubmitting}
-                                    onPress={handleSubmit}
-                                    style={{marginTop: 10}}>
+                            <Button
+                                block
+                                disabled={!isValid || isSubmitting}
+                                onPress={handleSubmit}
+                                style={{marginTop: 10}}>
 
-                                    {isSubmitting && <Spinner size={'small'} color={'white'}/>}
-                                    <Text>Kayıt Ol</Text>
-                                </Button>
-                            </Content>
-                        )}
-                    </Formik>
-                );
-            } else {
-                return <AuthLoading/>
-            }
+                                {isSubmitting && <Spinner size={'small'} color={'white'}/> && this.state.validatedStoreCode}
+                                <Text>Kayıt Ol</Text>
+                            </Button>
+                        </Content>
+                    )}
+                </Formik>
+            );
         }
     }
 }

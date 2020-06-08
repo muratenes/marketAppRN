@@ -16,17 +16,19 @@ const validations = Yup.object().shape({
     , name: Yup
         .string()
         .required("tam ad soyad giriniz"),
-    ref_user: Yup
-        .number()
-        .required(),
     phone: Yup
         .number()
         .required("telefon gereklidir"),
     address: Yup
         .string()
-        .min(10,"en az 10 karakter olmalı")
+        .min(5,"en az 5 karakter olmalı")
         .max(255)
-        .required("Adres bilgisi gereklidir")
+        .required("Adres bilgisi gereklidir"),
+    store_code : Yup
+        .string()
+        .min(6,'mağaza kodu 6 karakter olmalıdır')
+        .max(6,'mağaza kodu 6 karakter olmalıdır')
+        .required('mağaza kodu gereklidir')
 });
 
 module.exports = validations;

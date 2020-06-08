@@ -54,7 +54,7 @@ export default class BasketList extends Component {
                 this.props.BasketStore.basketItems = data.data.basket.items
                 this.props.OrderStore.getOrders();
                 alert('sipariş başarılı şekilde alındı')
-                this.setState({loading: false})
+                this.setState({loading: false, orderNote: '', accordionFlex: 1})
                 NavigationService.navigate('OrderList')
             }
         } catch (e) {
