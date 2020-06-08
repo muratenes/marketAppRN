@@ -18,8 +18,14 @@ async function storeOrderSocketIoInitialize() {
                 client: Socketio,
                 auth: {headers: {Authorization: "Bearer " + AuthStore.token}}
             });
-            echo.private('store.order.worker:' + user.id)
-                .listen('NewOrderAddedForWorkerEvent', (data) => {
+            let channelNameWithValue = 'store.' + user.id;
+            let eventName = 'NewOrderAddedEvent'
+            if (user.role_id == ROLE_STORE_WORKER) {
+                channelNameWithValue = 'store.order.worker:' + user.id
+                eventName = 'NewOrderAddedForWorkerEvent'
+            }
+            echo.private(channelNameWithValue)
+                .listen(eventName, (data) => {
                     OrderStore.setPendingOrderCount(data.pendingOrderCount);
                     OrderStore.getStoreOrders()
                     Toast.show({

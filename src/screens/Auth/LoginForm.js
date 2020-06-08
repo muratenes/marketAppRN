@@ -71,8 +71,7 @@ export default class LoginForm extends Component {
                         <Item error={errors.password && touched.password}>
                             <Input
                                 ref={ref => this.passwordRef = ref}
-                                returnKeyType={'next'}
-                                onSubmitEditing={() => this.passwordConfirmRef._root.focus()}
+                                returnKeyType={'go'}
                                 onChangeText={handleChange('password')}
                                 value={values.password}
                                 placeholder='password'

@@ -43,7 +43,6 @@ class AuthStore {
             this.token = token;
             const userData = JSON.parse(await AsyncStorage.getItem('user'));
             this.user = userData;
-            console.log(userData)
             if (userData.role_id == ROLE_STORE_WORKER || userData.role_id == ROLE_STORE) {
                 NavigationService.navigate('StoreApp')
             } else {
