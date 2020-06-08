@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {FlatList, ScrollView, View, RefreshControl, StyleSheet} from 'react-native';
 import {inject, observer} from "mobx-react";
-import {Fab, Button,Text} from 'native-base';
+import {Fab, Button, Text} from 'native-base';
 
 
 import StoreProductListItem from "./StoreProductListItem";
 import StoreNavbar from "../../../components/StoreNavbar";
 import NavigationService from "../../../NavigationService";
 import Icon from "react-native-vector-icons/FontAwesome";
+import {ROLE_STORE} from "../../../constants";
 
 
-@inject("ProductStore", "UserStore","OrderStore")
+@inject("ProductStore", "UserStore", "OrderStore", "AuthStore")
 @observer
 export default class ProductList extends Component {
 
@@ -21,9 +22,9 @@ export default class ProductList extends Component {
 
     componentDidMount(): void {
         this.props.ProductStore.getStoreProducts();
-        const item = {"id": 23, "title": "Yumurta", "active": 1, "price": "0.90", "discount_price": null, "image": "http://192.168.0.21:8000/uploads/products/yumurta.png","image_url": "http://192.168.0.21:8000/uploads/products/yumurta.png"};
+        const item = {"id": 23, "title": "Yumurta", "active": 1, "price": "0.90", "discount_price": null, "image": "http://192.168.0.21:8000/uploads/products/yumurta.png", "image_url": "http://192.168.0.21:8000/uploads/products/yumurta.png"};
         // NavigationService.navigate('StoreProductDetail', {item})
-       // this.redirectToAddNewProductPage()
+        // this.redirectToAddNewProductPage()
 
     }
 
@@ -70,6 +71,7 @@ export default class ProductList extends Component {
                         data={this.props.ProductStore.products}
                     />
                 </ScrollView>
+                {this.props.AuthStore.user.role_id == ROLE_STORE &&
                 <Fab
                     active={this.state.active}
                     direction="up"
@@ -79,6 +81,7 @@ export default class ProductList extends Component {
                     onPress={this.redirectToAddNewProductPage}>
                     <Icon name="plus"/>
                 </Fab>
+                }
             </View>
         );
     }

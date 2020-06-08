@@ -7,7 +7,8 @@ import {Formik} from "formik";
 import validations from './loginValidation';
 import {inject} from "mobx-react";
 import axios from "axios";
-import {API_BASE} from "../../constants";
+import {API_BASE, WEB_BASE} from "../../constants";
+import {Linking} from "react-native";
 
 
 @inject('AuthStore', 'UserStore')
@@ -30,6 +31,10 @@ export default class LoginForm extends Component {
             alert(e)
         }
     };
+
+    _redirectToForgotPasswordScreen = () => {
+        Linking.openURL(`${WEB_BASE}/password/reset`).catch(err => console.error("Couldn't load page", err));
+    }
 
     render() {
         return (
@@ -91,6 +96,9 @@ export default class LoginForm extends Component {
 
                             {isSubmitting && <Spinner size={'small'} color={'white'}/>}
                             <Text>Giriş Yap</Text>
+                        </Button>
+                        <Button transparent light onPress={this._redirectToForgotPasswordScreen}>
+                            <Text>Şifremi Unuttum</Text>
                         </Button>
                     </Content>
                 )}

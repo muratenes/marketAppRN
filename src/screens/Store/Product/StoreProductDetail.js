@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 import {Formik} from "formik";
 import axios from "axios";
-import {API_BASE} from "../../../constants";
+import {API_BASE, ROLE_STORE} from "../../../constants";
 import {
     convertToFormData,
     showAlertDialog,
@@ -43,7 +43,7 @@ const options = {
     allowsEditing: true
 };
 
-@inject('ProductStore')
+@inject('ProductStore', 'AuthStore')
 export default class StoreProductDetail extends Component {
     state = {
         avatarSource: null,
@@ -87,17 +87,27 @@ export default class StoreProductDetail extends Component {
     };
 
     _onSelectPicture = () => {
-        ImagePicker.showImagePicker(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                this.uploadPhoto(response);
-            }
-        });
+        if (this.props.AuthStore.user.role_id !== ROLE_STORE) {
+            Toast.show({
+                text: "Yetkiniz yok",
+                buttonText: "Tamam",
+                buttonTextStyle: {color: "#008000"},
+                buttonStyle: {backgroundColor: "#5cb85c"}
+            })
+        } else {
+            ImagePicker.showImagePicker(options, (response) => {
+                if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                } else if (response.customButton) {
+                    console.log('User tapped custom button: ', response.customButton);
+                } else {
+                    this.uploadPhoto(response);
+                }
+            });
+        }
+
     };
 
     uploadPhoto = async response => {
@@ -111,8 +121,6 @@ export default class StoreProductDetail extends Component {
 
         const config = {headers: {'Accept': 'application/json', 'Content-type': 'multipart/form-data'}};
         const {data} = await axios.post(`${API_BASE}/store/uploadProductImage/${this.state.item.id}`, formData, config);
-        console.log(formData);
-
         this.setState({loading: false});
         if (data.status) {
             this.setState({
@@ -231,6 +239,7 @@ export default class StoreProductDetail extends Component {
                                         </View>
                                     </View>
                                 </Item>
+                                {this.props.AuthStore.user.role_id === ROLE_STORE &&
                                 <Button
                                     block
                                     success
@@ -241,6 +250,7 @@ export default class StoreProductDetail extends Component {
                                     {isSubmitting && <Spinner size={'small'} color={'white'}/>}
                                     <Text style={{color: 'white'}}>Kaydet</Text>
                                 </Button>
+                                }
                             </Content>
                         </Card>
                     )}

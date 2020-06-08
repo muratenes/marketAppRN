@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
 import LoginForm from "./LoginForm";
-import {Body, Header, Title} from "native-base";
+import {Body, Header, Title,Button} from "native-base";
 
 
 export default class Login extends Component {

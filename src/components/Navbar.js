@@ -33,7 +33,7 @@ export default class Navbar extends Component {
                     <Title>{this.props.title}</Title>
                 </Body>
                 <Right>
-                    {this.props.AuthStore.user && <Button transparent onPress={() => Linking.openURL(`tel:${this.props.AuthStore.user.ref_user.phone}`)}>
+                    {this.props.AuthStore.user && <Button transparent onPress={() => Linking.openURL(`tel:${this.props.AuthStore.user.store_user.phone}`)}>
                         <Icon name='phone' color={'white'} size={20}/>
                     </Button>}
                     <Button transparent onPress={() => NavigationService.navigate('BasketList')}>
