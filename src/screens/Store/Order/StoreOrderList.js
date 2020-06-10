@@ -7,6 +7,8 @@ import {styles} from "./style";
 import OrderStore from "../../../store/OrderStore";
 import StoreNavbar from "../../../components/StoreNavbar";
 import StoreEmptyOrder from "./StoreEmptyOrder";
+import {TouchableOpacity} from "react-native";
+import NavigationService from "../../../NavigationService";
 
 @inject("OrderStore")
 @observer
@@ -61,11 +63,11 @@ export default class StoreOrderList extends Component {
 
 
     _renderContent(item) {
-        const basketItemRender = item.basket.items.map(basketItemRender => (
+        const basketItemRender = item.basket.items.map(basketItem => (
             <View style={styles.tableItemContainer}>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.product.title}</Text></View>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.qty}</Text></View>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.total_price} ₺</Text></View>
+                <View style={styles.tableContentItem}><TouchableOpacity onPress={() => NavigationService.navigate('StoreProductDetail', {item: basketItem.product})}><Text>{basketItem.product.title}</Text></TouchableOpacity></View>
+                <View style={styles.tableContentItem}><Text>{basketItem.qty}</Text></View>
+                <View style={styles.tableContentItem}><Text>{basketItem.total_price} ₺</Text></View>
             </View>
 
         ));
@@ -74,7 +76,7 @@ export default class StoreOrderList extends Component {
                 {item.note !== null && <View style={styles.tableHeaderContainer}>
                     <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderNoteItemText}>Not</Text></View>
                     <View style={styles.tableAddressContentItem}><Text style={styles.tableItemNoteText}>{item.note}</Text></View>
-                </View> }
+                </View>}
                 <View style={styles.tableHeaderContainer}>
                     <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Adres</Text></View>
                     <View style={styles.tableAddressContentItem}><Text style={styles.tableItemAddressText}>{item.user.address}</Text></View>
@@ -110,7 +112,7 @@ export default class StoreOrderList extends Component {
                 backgroundColor: itemColors['backColor']
             }}>
                 <Text style={{fontWeight: "600"}}>
-                       {<Text style={{color: itemColors['color']}}>{item.created_at.substring(5, 16)} | {item.total_price} ₺ | {item.status_text}</Text>}
+                    {<Text style={{color: itemColors['color']}}>{item.created_at.substring(5, 16)} | {item.total_price} ₺ | {item.status_text}</Text>}
                 </Text>
                 {expanded ? <Icon style={{fontSize: 18}} name="angle-up"/> : <Icon style={{fontSize: 18}} name="angle-down"/>}
             </View>

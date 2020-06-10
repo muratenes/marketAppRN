@@ -61,9 +61,21 @@ export default class StoreProductDetail extends Component {
     componentDidMount(): void {
         const item = this.props.navigation.getParam('item');
         this.setState({
-            // avatarSource: item.image,
             item: item
         });
+        console.log(this.state.item)
+    }
+
+
+    componentDidUpdate() : void{
+        const item = this.props.navigation.getParam('item');
+        if (this.state.item) {
+            if (this.state.item.id !== item.id) {
+                this.setState({item});
+            }
+        }else{
+            this.setState({item});
+        }
     }
 
     _handleSubmit = async (getData, bag) => {
@@ -74,7 +86,7 @@ export default class StoreProductDetail extends Component {
             const {data} = await axios.post(`${API_BASE}/store/updateStoreProduct/${productId}`, requestData);
             if (data.status) {
                 this.props.ProductStore.products = data.data.products;
-                if (this.state.item.id == 0)
+                if (this.state.item.id === 0)
                     NavigationService.navigate('StoreProductDetail', {item: data.data.product})
                 else
                     goBack();
@@ -162,10 +174,10 @@ export default class StoreProductDetail extends Component {
                 {this.state.item &&
                 <Formik
                     initialValues={{
-                        title: item.title,
-                        price: '' + item.price,
-                        discount_price: '' + item.discount_price === null ? '' : item.discount_price,
-                        active: item.active == 1
+                        title: this.state.item.title,
+                        price: '' + this.state.item.price,
+                        discount_price: '' + this.state.item.discount_price === null ? '' : this.state.item.discount_price,
+                        active: this.state.item.active === 1
                     }}
                     onSubmit={this._handleSubmit}
                 >
