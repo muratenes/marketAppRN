@@ -5,6 +5,7 @@ import CompanyStore from "./CompanyStore";
 import UserStore from "./UserStore";
 import BasketStore from "./BasketStore";
 import OrderStore from "./OrderStore";
+import CategoryStore from "./CategoryStore";
 
 export default {
     AuthStore,
@@ -14,4 +15,5 @@ export default {
     UserStore,
     BasketStore,
     OrderStore,
+    CategoryStore,
 }

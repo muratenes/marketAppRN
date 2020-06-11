@@ -14,7 +14,7 @@ class ProductStore {
         const {data} = await axios.get(`${API_BASE}/products`)
         runInAction(() => {
             this.loading = this.refreshing = false;
-            this.products = data.data
+            this.products = data.data.data
         })
     }
 
@@ -25,6 +25,18 @@ class ProductStore {
         runInAction(() => {
             this.loading = this.refreshing = false;
             this.products = data.data
+        })
+    }
+
+    @action
+    async getStoreProductsByCategoryId(id) {
+        this.loading  = this.refreshing= true;
+        const {data} = await axios.get(`${API_BASE}/products/category/${id}`)
+        runInAction(() => {
+            this.loading = this.refreshing = false;
+            if (data.status) {
+                this.products = data.data.data
+            }
         })
     }
 }

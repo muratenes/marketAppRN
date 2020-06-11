@@ -71,7 +71,7 @@ export default class ProductList extends Component {
                         data={this.props.ProductStore.products}
                     />
                 </ScrollView>
-                {this.props.AuthStore.user.role_id == ROLE_STORE &&
+                {this.props.AuthStore.user.role_id === ROLE_STORE &&
                 <Fab
                     active={this.state.active}
                     direction="up"
@@ -86,10 +86,3 @@ export default class ProductList extends Component {
         );
     }
 }
-
-
-const styles = StyleSheet.create({
-    flatList: {
-        flex: 1, alignItems: 'flex-start'
-    }
-});

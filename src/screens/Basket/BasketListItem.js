@@ -6,8 +6,6 @@ import BasketStore from "../../store/BasketStore";
 import React from "react";
 
 const BasketListItem = ({item, index}) => {
-    //item = item.item;
-    // index = item.index;
     return (
         <View style={styles.itemStyle}>
             <Card>

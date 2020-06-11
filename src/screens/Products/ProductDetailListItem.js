@@ -1,10 +1,8 @@
 import React from 'react';
 import {Left, Right, Card, CardItem, Thumbnail, Text, Button, Body, View} from 'native-base';
 import {StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import BasketStore from "../../store/BasketStore";
 import NavigationService from "../../NavigationService";
-import {max} from "react-native-reanimated";
 
 addToBasket = (item) => {
     BasketStore.addToBasket(item.id, 1)

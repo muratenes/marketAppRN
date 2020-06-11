@@ -6,9 +6,10 @@ import Navbar from "../../components/Navbar";
 import {Header, Item, Button, Input, Icon} from 'native-base';
 import {RefreshControl} from 'react-native';
 import UserStore from "../../store/UserStore";
+import CategoriesLabels from "../../components/CategoriesLabels";
 // import Icon from "react-native-vector-icons/FontAwesome";
 
-@inject("ProductStore", "UserStore")
+@inject("ProductStore", "UserStore","CategoryStore")
 @observer
 export default class Home extends Component {
 
@@ -48,10 +49,8 @@ export default class Home extends Component {
     };
 
     _clearInputText = () => {
-        console.log('kapandı');
         this.setState({text: ''});
         this.props.ProductStore.products = this.state.all_products;
-        Keyboard.dismiss()
     }
 
     _onChangeText = (text) => {
@@ -84,10 +83,11 @@ export default class Home extends Component {
                         <Text>Search</Text>
                     </Button>
                 </Header>
+                <CategoriesLabels/>
                 <FlatList
                     columnWrapperStyle={{alignItems: 'flex-start'}}
                     horizontal={false}
-                    numColumns={3}
+                    numColumns={2}
                     ListFooterComponent={this.renderFooter}
                     renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
                     keyExtractor={item => '' + item.id}
