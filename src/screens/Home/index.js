@@ -94,19 +94,25 @@ export default class Home extends Component {
                     data={this.props.ProductStore.products}
                     onEndReached={this._getMoreProducts}
                     onEndReachedThreshold={.001}
+                    onMomentumScrollBegin={() => {
+                        this.duringMomentum = false
+                    }}
                 />
             </View>
         );
     }
 
     _getMoreProducts = async () => {
-        console.log('çalıştı', this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage)
-        if (this.props.ProductStore.selectedCategoryId) {
-            await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
-        } else {
-            if (this.props.ProductStore.selectedCategoryId !== undefined) {
-                await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1);
+        if (!this.duringMomentum) {
+            console.log('çalıştı', this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage)
+            if (this.props.ProductStore.selectedCategoryId) {
+                await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
+            } else {
+                if (this.props.ProductStore.selectedCategoryId !== undefined) {
+                    await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1);
+                }
             }
+            this.duringMomentum = true;
         }
     }
 }
