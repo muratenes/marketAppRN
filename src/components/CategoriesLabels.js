@@ -9,7 +9,7 @@ export default class CategoriesLabels extends Component {
 
     constructor() {
         super();
-        this.state = {categories: [],selectedCategoryId: 0}
+        this.state = {categories: []}
     }
 
     async componentDidMount(): void {
@@ -40,17 +40,16 @@ export default class CategoriesLabels extends Component {
     _renderItem = (item) => {
         return (
             <TouchableOpacity onPress={async () => {
-                if (this.state.selectedCategoryId === item.id) {
-                    await this.setState({selectedCategoryId:0})
-                    await this.props.ProductStore.getProducts()
+                if (this.props.ProductStore.selectedCategoryId === item.id) {
+                    await this.props.ProductStore.setCurrentCategoryValue(0)
+                    await this.props.ProductStore.getProducts(1)
                 }else{
-                    await this.setState({selectedCategoryId:item.id})
-                    await this.props.ProductStore.getStoreProductsByCategoryId(item.id);
+                    await this.props.ProductStore.getStoreProductsByCategoryId(item.id,1);
                 }
                 await this.setState({categories: [...this.props.CategoryStore.categories]})
             }}>
-                <Badge style={this.state.selectedCategoryId === item.id ?  styles.selectedBadge : styles.badge}>
-                    <Text style={styles.badgeText}>{item.title}</Text>
+                <Badge style={this.props.ProductStore.selectedCategoryId === item.id ?  styles.selectedBadge : styles.badge}>
+                    <Text style={styles.badgeText}>{item.title+"|"+item.id}</Text>
                 </Badge>
             </TouchableOpacity>);
     }

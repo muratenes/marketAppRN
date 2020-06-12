@@ -1,20 +1,24 @@
 import {action, observable, runInAction} from "mobx";
 import axios from "axios";
 import {API_BASE} from "../constants";
+import {isInteger} from "formik";
 
 
 class ProductStore {
     @observable products = [];
     @observable loading = false;
     @observable refreshing = false;
+    @observable selectedCategoryId = 0;
+    @observable currentPage = 0;
 
     @action
-    async getProducts() {
+    async getProducts(page = 1) {
         this.loading = this.refreshing = true;
-        const {data} = await axios.get(`${API_BASE}/products`)
+        this.currentPage = page;
+        const {data} = await axios.get(`${API_BASE}/products?page=${page}`)
         runInAction(() => {
             this.loading = this.refreshing = false;
-            this.products = data.data.data
+            this.products = page === 1 ? data.data.data : [...this.products, ...data.data.data];
         })
     }
 
@@ -29,15 +33,24 @@ class ProductStore {
     }
 
     @action
-    async getStoreProductsByCategoryId(id) {
-        this.loading  = this.refreshing= true;
-        const {data} = await axios.get(`${API_BASE}/products/category/${id}`)
+    async getStoreProductsByCategoryId(id, page = 1) {
+        this.loading = this.refreshing = true;
+        if (id !== undefined) {
+            this.selectedCategoryId = id;
+        }
+        this.currentPage = page;
+        const {data} = await axios.get(`${API_BASE}/products/category/${this.selectedCategoryId}?page=${page}`)
         runInAction(() => {
             this.loading = this.refreshing = false;
             if (data.status) {
-                this.products = data.data.data
+                this.products = page === 1 ? data.data.data : [...this.products, ...data.data.data];
             }
         })
+    }
+
+    @action
+    async setCurrentCategoryValue(category){
+        this.selectedCategoryId = category;
     }
 }
 

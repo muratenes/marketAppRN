@@ -9,7 +9,7 @@ import UserStore from "../../store/UserStore";
 import CategoriesLabels from "../../components/CategoriesLabels";
 // import Icon from "react-native-vector-icons/FontAwesome";
 
-@inject("ProductStore", "UserStore","CategoryStore")
+@inject("ProductStore", "UserStore", "CategoryStore")
 @observer
 export default class Home extends Component {
 
@@ -65,7 +65,7 @@ export default class Home extends Component {
 
     render() {
         return (
-            <ScrollView refreshControl={
+            <View refreshControl={
                 <RefreshControl
                     refreshing={this.props.ProductStore.refreshing}
                     onRefresh={this.onRefresh}
@@ -92,8 +92,21 @@ export default class Home extends Component {
                     renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
                     keyExtractor={item => '' + item.id}
                     data={this.props.ProductStore.products}
+                    onEndReached={this._getMoreProducts}
+                    onEndReachedThreshold={.001}
                 />
-            </ScrollView>
+            </View>
         );
+    }
+
+    _getMoreProducts = async () => {
+        console.log('çalıştı', this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage)
+        if (this.props.ProductStore.selectedCategoryId) {
+            await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
+        } else {
+            if (this.props.ProductStore.selectedCategoryId !== undefined) {
+                await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1);
+            }
+        }
     }
 }
