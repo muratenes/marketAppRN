@@ -1,25 +1,18 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, ScrollView, Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {Badge} from 'native-base';
-import {inject} from "mobx-react";
-import ProductDetailListItem from "../screens/Products/ProductDetailListItem";
+import {inject, observer} from "mobx-react";
 
-@inject("CategoryStore", "ProductStore")
+@inject("ProductStore")
+@observer
 export default class CategoriesLabels extends Component {
-
-    constructor() {
-        super();
-        this.state = {categories: []}
-    }
-
-    async componentDidMount(): void {
-        await this.props.CategoryStore.getCategoriesByStore();
-        this.setState({categories: this.props.CategoryStore.categories})
+    componentDidMount(): void {
+        this.props.ProductStore.getCategoriesByStore();
     }
     render() {
         return (
             <View style={styles.badgeContainer}>
-                {this.state.categories &&
+                {this.props.ProductStore.categories &&
                 <ScrollView horizontal={true}
                             decelerationRate={0}
                             snapToAlignment={"center"}
@@ -30,7 +23,7 @@ export default class CategoriesLabels extends Component {
                         numColumns={30}
                         renderItem={({item}) => this._renderItem(item)}
                         keyExtractor={item => '' + item.id}
-                        data={this.state.categories}
+                        data={this.props.ProductStore.categories}
                     />
                 </ScrollView>}
             </View>
@@ -46,7 +39,7 @@ export default class CategoriesLabels extends Component {
                 }else{
                     await this.props.ProductStore.getStoreProductsByCategoryId(item.id,1);
                 }
-                await this.setState({categories: [...this.props.CategoryStore.categories]})
+                await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
             }}>
                 <Badge style={this.props.ProductStore.selectedCategoryId === item.id ?  styles.selectedBadge : styles.badge}>
                     <Text style={styles.badgeText}>{item.title+"|"+item.id}</Text>

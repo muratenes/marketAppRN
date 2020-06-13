@@ -6,6 +6,7 @@ import {isInteger} from "formik";
 
 class ProductStore {
     @observable products = [];
+    @observable categories = [];
     @observable loading = false;
     @observable refreshing = false;
     @observable selectedCategoryId = 0;
@@ -52,6 +53,23 @@ class ProductStore {
     @action
     async setCurrentCategoryValue(category){
         this.selectedCategoryId = category;
+    }
+
+
+    @action
+    async getCategoriesByStore(){
+        this.loading = true;
+        const {data} = await axios.get(`${API_BASE}/store/categories`)
+        runInAction(()=>{
+            if (data.status) {
+                this.loading = false;
+                this.categories = data.data;
+            }
+        })
+    }
+
+    @action setCategories(categories){
+        this.categories = categories;
     }
 }
 

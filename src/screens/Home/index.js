@@ -16,7 +16,6 @@ export default class Home extends Component {
 
     state = {
         text: '',
-        all_products: []
     }
 
     constructor(props) {
@@ -24,22 +23,15 @@ export default class Home extends Component {
         this.textRef = React.createRef();
     }
 
-    async componentDidMount(): void {
-        await this.props.ProductStore.getProducts();
-        this.setState({all_products: this.props.ProductStore.products})
+     componentDidMount(): void {
+        this.props.ProductStore.getProducts();
         //this.props.UserStore.getUserFromSession();
     }
 
     onRefresh = async () => {
         await this.props.ProductStore.setCurrentCategoryValue(0);
-        const newCats = this.props.CategoryStore.categories;
-        await this.props.CategoryStore.setCategories(newCats.slice(0, newCats.length-1))
-        this.setState({
-            page: 1,
-            refreshing: true
-        }, () => {
-            this.props.ProductStore.getProducts(1);
-        });
+        await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
+        await this.props.ProductStore.getProducts(1);
     };
 
     renderFooter = () => {
@@ -50,9 +42,9 @@ export default class Home extends Component {
         )
     };
 
-    _clearInputText = () => {
+    _clearInputText = async () => {
         this.setState({text: ''});
-        this.props.ProductStore.products = this.state.all_products;
+        await this.props.ProductStore.getProducts(1)
     }
 
     _onChangeText = (text) => {
