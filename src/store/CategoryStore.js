@@ -16,5 +16,9 @@ class CategoryStore {
             }
         })
     }
+
+    @action setCategories(categories){
+        this.categories = categories;
+    }
 }
 export default new CategoryStore();

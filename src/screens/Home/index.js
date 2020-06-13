@@ -53,14 +53,13 @@ export default class Home extends Component {
         this.props.ProductStore.products = this.state.all_products;
     }
 
-    _onChangeText = (text) => {
-        this.setState({text})
-        const newData = this.state.all_products.filter(item => {
-            const listItem = `${item.title.toLowerCase()}`;
-
-            return listItem.indexOf(text.toLowerCase()) > -1;
-        });
-        this.props.ProductStore.products = newData;
+    _onChangeText =(text) => {
+        this.setState({text}, async function () {
+            await this.props.ProductStore.setCurrentCategoryValue(0)
+            const newCats = this.props.CategoryStore.categories;
+            await this.props.CategoryStore.setCategories(newCats.slice(0,newCats.length))
+            await this.props.ProductStore.getProducts(1, this.state.text);
+        })
     }
 
     render() {
