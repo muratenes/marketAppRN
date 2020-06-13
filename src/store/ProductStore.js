@@ -3,9 +3,18 @@ import axios from "axios";
 import {API_BASE} from "../constants";
 import {isInteger} from "formik";
 
+type Product = {
+    id: number,
+    title: string,
+    price : number,
+    discount_price : number,
+    image : string,
+    unit_label :string,
+    unit_amount : number
+}
 
 class ProductStore {
-    @observable products = [];
+    @observable products: Array<Product>
     @observable categories = [];
     @observable loading = false;
     @observable refreshing = false;
@@ -18,7 +27,6 @@ class ProductStore {
         this.currentPage = page;
         const {data} = await axios.get(`${API_BASE}/products?page=${page}&q=${query}`)
         runInAction(() => {
-            console.log(data.data)
             this.loading = this.refreshing = false;
             this.products = page === 1 ? data.data.data : [...this.products, ...data.data.data];
         })

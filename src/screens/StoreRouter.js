@@ -5,10 +5,11 @@ import {createBottomTabNavigator} from "react-navigation-tabs";
 import StoreOrderList from "./Store/Order/StoreOrderList";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ProductList from "./Store/Product/ProductList";
+import Profile from './Store/Profile';
+
 import {createStackNavigator} from "react-navigation-stack";
 import StoreProductDetail from "./Store/Product/StoreProductDetail";
 import {inject, observer} from "mobx-react";
-import OrderStore from "../store/OrderStore";
 import StoreOrderListBottomNavigator from "../components/StoreOrderListBottomNavigator";
 
 const ProductStackNavigator = createStackNavigator({
@@ -38,6 +39,13 @@ export const  appStoreStack = createBottomTabNavigator({
         navigationOptions: {
             title: 'Ürünlerim',
             tabBarIcon: ({tintColor}) => <Icon name={'list'} style={{color: tintColor}} size={22}/>
+        }
+    },
+    Profile: {
+        screen: Profile,
+        navigationOptions: {
+            title: 'Profil',
+            tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
     }
 }, {headerLayoutPreset: 'center', initialRouteName: 'ProductList'})

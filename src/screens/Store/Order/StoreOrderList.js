@@ -43,8 +43,7 @@ export default class StoreOrderList extends Component {
                                 expandedIconStyle={{color: "red"}}
                                 renderHeader={this._renderHeader}
                                 renderContent={this._renderContent}
-                                keyExtractor={item => '' + item.id}
-                                key={item => '' + item.id}
+                                key={item => item.id}
                             />
                         </Content>
                     </Container>}
