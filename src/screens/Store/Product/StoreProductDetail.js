@@ -63,17 +63,18 @@ export default class StoreProductDetail extends Component {
         this.setState({
             item: item
         });
-        console.log(this.state.item)
     }
 
 
-    componentDidUpdate() : void{
+    componentDidUpdate(): void {
         const item = this.props.navigation.getParam('item');
+        console.log(item)
+        console.log(item.id, this.state.item.id)
         if (this.state.item) {
             if (this.state.item.id !== item.id) {
                 this.setState({item});
             }
-        }else{
+        } else {
             this.setState({item});
         }
     }
@@ -180,6 +181,7 @@ export default class StoreProductDetail extends Component {
                         active: this.state.item.active === 1
                     }}
                     onSubmit={this._handleSubmit}
+                    enableReinitialize={true}
                 >
                     {({
                           values,
@@ -190,7 +192,7 @@ export default class StoreProductDetail extends Component {
                           setFieldTouched,
                           isValid,
                           isSubmitting,
-                          setFieldValue
+                          setFieldValue,
                       }) => (
                         <Card>
                             <Content style={{padding: 10}}>
