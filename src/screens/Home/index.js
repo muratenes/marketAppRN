@@ -81,8 +81,8 @@ export default class Home extends Component {
                     <Button transparent>
                         <Text>Search</Text>
                     </Button>
-                </Header>
-                <CategoriesLabels/>
+                </Header>{this.state.text === '' &&
+                <CategoriesLabels/>}
                 <FlatList
                     columnWrapperStyle={{alignItems: 'flex-start'}}
                     horizontal={false}
@@ -108,7 +108,7 @@ export default class Home extends Component {
                 await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
             } else {
                 if (this.props.ProductStore.selectedCategoryId !== undefined) {
-                    await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1);
+                    await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1,this.state.text);
                 }
             }
             this.duringMomentum = true;
