@@ -30,12 +30,15 @@ export default class Home extends Component {
         //this.props.UserStore.getUserFromSession();
     }
 
-    onRefresh = () => {
+    onRefresh = async () => {
+        await this.props.ProductStore.setCurrentCategoryValue(0);
+        const newCats = this.props.CategoryStore.categories;
+        await this.props.CategoryStore.setCategories(newCats.slice(0, newCats.length-1))
         this.setState({
             page: 1,
             refreshing: true
         }, () => {
-            this.props.ProductStore.getProducts();
+            this.props.ProductStore.getProducts(1);
         });
     };
 
@@ -87,6 +90,8 @@ export default class Home extends Component {
                     columnWrapperStyle={{alignItems: 'flex-start'}}
                     horizontal={false}
                     numColumns={2}
+                    refreshing={this.props.ProductStore.refreshing}
+                    onRefresh={this.onRefresh}
                     ListFooterComponent={this.renderFooter}
                     renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
                     keyExtractor={item => '' + item.id}
