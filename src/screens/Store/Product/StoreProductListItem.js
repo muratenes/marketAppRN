@@ -1,34 +1,29 @@
 import React from 'react';
-import {Left, Right, Card, CardItem, Thumbnail, Image, Text} from 'native-base';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {Left, Right, Card, CardItem, Thumbnail, Text, Button, Body, View} from 'native-base';
+import {StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
 import NavigationService from "../../../NavigationService";
+import {styles_detail}  from './styles_detail';
 
 
-const StoreProductListItem = ({item}) => (
-    <TouchableOpacity style={styles.card} onPress={() => NavigationService.navigate('StoreProductDetail',{ item }) }>
+const ProductDetailListItem = ({item, maxWidth}) => (
+    <TouchableOpacity onPress={() => NavigationService.navigate('StoreProductDetail', {item})} style={[styles_detail.container, {maxWidth}]}>
         <Card>
-            <CardItem>
-                <Thumbnail source={{uri: item.image_url}}/>
-                <Text style={styles.title}>{item.title}</Text>
-            </CardItem>
-            <CardItem>
-                <Left>
-                    <Text style={styles.priceText}> Fiyat : {item.price} ₺</Text>
-                </Left>
-            </CardItem>
+            <View style={styles_detail.viewContainer}>
+                <View style={styles_detail.imageViewContainer}>
+                    <Image source={{uri: item.image_url}} style={styles_detail.image}/>
+                </View>
+                <View style={styles_detail.textContainer}>
+                    <Text style={styles_detail.title}>{item.title}</Text>
+                    <Text style={styles_detail.weightText}>{item.gram}</Text>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                        <Text style={item.discount_price ? styles_detail.priceTextWhenDiscount : styles_detail.priceText}>{item.price} ₺</Text>
+                        {item.discount_price && <Text style={styles_detail.discountPriceText}>{item.discount_price} ₺</Text>}
+                    </View>
+                </View>
+            </View>
         </Card>
     </TouchableOpacity>
 );
-const styles = StyleSheet.create({
-    title: {
-        padding: 6,
-        fontSize: 14,
-        fontWeight: 'bold'
-    }, priceText: {
-        fontWeight: 'bold'
-    }, card: {
-        flex: 0.5
-    }
-});
-export default StoreProductListItem;
+
+export default ProductDetailListItem;
 
