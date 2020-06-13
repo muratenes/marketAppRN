@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import {Keyboard, StyleSheet, Text, FlatList, ScrollView, View, Dimensions, Image} from 'react-native';
 import {inject, observer} from "mobx-react";
 import ProductDetailListItem from "../Products/ProductDetailListItem";
-import Navbar from "../../components/Navbar";
 import {Header, Item, Button, Input, Icon} from 'native-base';
 import {RefreshControl} from 'react-native';
 import UserStore from "../../store/UserStore";
 import CategoriesLabels from "../../components/CategoriesLabels";
-import AuthLoading from "../AuthLoading";
-// import Icon from "react-native-vector-icons/FontAwesome";
 
 @inject("ProductStore", "UserStore", "CategoryStore")
 @observer

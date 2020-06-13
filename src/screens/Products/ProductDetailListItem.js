@@ -15,7 +15,7 @@ const ProductDetailListItem = ({item, maxWidth}) => (
         <Card>
             <View style={styles_detail.viewContainer}>
                 <View style={styles_detail.imageViewContainer}>
-                    <Image source={{uri: item.image_url}} style={styles.image}/>
+                    <Image source={{uri: item.image_url}} style={styles_detail.image}/>
                 </View>
                 <View style={styles_detail.textContainer}>
                     <Text style={styles_detail.title}>{item.title}</Text>
