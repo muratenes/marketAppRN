@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Button, Container, Header, Title, Left, Text, Body, Right, Badge} from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import {inject} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import NavigationService from "../NavigationService";
 import {Linking} from 'react-native'
 import AsyncStorage from "@react-native-community/async-storage";
@@ -9,26 +9,19 @@ import AuthStore from "../store/AuthStore";
 
 
 @inject("AuthStore", "BasketStore")
+@observer
 export default class Navbar extends Component {
 
 
     componentDidMount(): void {
         this.props.BasketStore.getBasket()
-       // this.props.AuthStore.getSessionUser()
     }
-
-
 
 
     render() {
         const {BasketStore} = this.props;
         return (
             <Header>
-                <Left>
-                    <Button transparent>
-                        <Icon name='list' color={'white'} size={20}/>
-                    </Button>
-                </Left>
                 <Body>
                     <Title>{this.props.title}</Title>
                 </Body>

@@ -9,11 +9,6 @@ export default class StoreNavbar extends Component {
     render() {
         return (
             <Header>
-                <Left>
-                    <Button transparent>
-                        <Icon name='list' color={'white'} size={20}/>
-                    </Button>
-                </Left>
                 <Body>
                     <Title>{this.props.title} </Title>
                 </Body>

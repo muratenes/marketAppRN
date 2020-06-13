@@ -141,6 +141,7 @@ export default class Profile extends Component {
                                         onBlur={() => setFieldTouched('phone')}
                                         autoCorrect={false}
                                         keyboardType="numeric"
+                                        maxLength={10}
                                         autoCapitalize={'none'}
                                     />
 

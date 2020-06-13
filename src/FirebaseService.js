@@ -49,7 +49,7 @@ function checkFirebasePermissions() {
             if (enabled) {
                 messaging.getToken()
                     .then(token => {
-                        if (AuthStore.firebase_token !== token || AuthStore.firebase_token === null) {
+                        if (AuthStore.firebase_token !== token || AuthStore.firebase_token === null || AuthStore.firebase_token === undefined) {
                             AuthStore.saveFirebaseToken(token)
                         }
                     })
