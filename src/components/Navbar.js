@@ -14,7 +14,7 @@ export default class Navbar extends Component {
 
 
     componentDidMount(): void {
-        this.props.BasketStore.getBasket()
+        //this.props.BasketStore.getBasket()
     }
 
 
@@ -30,7 +30,7 @@ export default class Navbar extends Component {
                         <Icon name='phone' color={'white'} size={20}/>
                     </Button>}
                     <Button transparent onPress={() => NavigationService.navigate('BasketList')}>
-                        <Badge style={{position: 'absolute'}} danger><Text>{BasketStore.basketItems.length}</Text></Badge>
+                        <Badge style={{position: 'absolute'}} danger><Text>{BasketStore.basketItems ? BasketStore.basketItems.length  : 0 }</Text></Badge>
                         <Icon name='shopping-basket' color={'white'} size={20}/>
                     </Button>
                     <Button transparent>

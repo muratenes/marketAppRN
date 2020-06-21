@@ -63,18 +63,18 @@ export default class OrderList extends Component {
     _renderContent(item) {
         const basketItemRender = item.basket.items.map(basketItemRender => (
             <View style={styles.tableItemContainer}>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.product.title}</Text></View>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.qty}</Text></View>
-                <View style={styles.tableContentItem}><Text>{basketItemRender.total_price} ₺</Text></View>
+                <View style={[styles.tableContentItem,styles.flex5]}><Text>{basketItemRender.product.title}</Text></View>
+                <View style={[styles.tableContentItem,styles.flex3]}><Text>{basketItemRender.qty}</Text></View>
+                <View style={[styles.tableContentItem,styles.flex3]}><Text>{basketItemRender.total_price} ₺</Text></View>
             </View>
 
         ));
         return (
             <View style={{flex: 1, flexDirection: 'column'}}>
                 <View style={styles.tableHeaderContainer}>
-                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
-                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
-                    <View style={styles.tableHeaderItem}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
+                    <View style={[styles.tableContentItem,styles.flex5]}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
+                    <View style={[styles.tableContentItem,styles.flex3]}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
+                    <View style={[styles.tableContentItem,styles.flex3]}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
                 </View>
                 {basketItemRender}
             </View>
