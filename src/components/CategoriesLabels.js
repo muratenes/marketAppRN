@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, ScrollView, Dimensions, FlatList, TouchableOpacity} from 'react-native';
-import {Badge} from 'native-base';
+import {Badge, Button} from 'native-base';
 import {inject, observer} from "mobx-react";
 
 @inject("ProductStore")
@@ -9,6 +9,7 @@ export default class CategoriesLabels extends Component {
     componentDidMount(): void {
         this.props.ProductStore.getCategoriesByStore();
     }
+
     render() {
         return (
             <View style={styles.badgeContainer}>
@@ -32,19 +33,17 @@ export default class CategoriesLabels extends Component {
 
     _renderItem = (item) => {
         return (
-            <TouchableOpacity onPress={async () => {
+            <Button onPress={async () => {
                 if (this.props.ProductStore.selectedCategoryId === item.id) {
                     await this.props.ProductStore.setCurrentCategoryValue(0)
                     await this.props.ProductStore.getProducts(1)
-                }else{
-                    await this.props.ProductStore.getStoreProductsByCategoryId(item.id,1);
+                } else {
+                    await this.props.ProductStore.getStoreProductsByCategoryId(item.id, 1);
                 }
                 await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
-            }}>
-                <Badge style={this.props.ProductStore.selectedCategoryId === item.id ?  styles.selectedBadge : styles.badge}>
-                    <Text style={styles.badgeText}>{item.title+"|"+item.id}</Text>
-                </Badge>
-            </TouchableOpacity>);
+            }} small bordered success style={this.props.ProductStore.selectedCategoryId === item.id ? styles.selectedBadge : styles.badge}>
+                    <Text style={styles.badgeText}>{item.title + "|" + item.id}</Text>
+            </Button>);
     }
 }
 
@@ -53,11 +52,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 3, paddingVertical: 4, flexDirection: 'row',
     },
     badge: {
-        backgroundColor: '#dedede',
-    },selectedBadge : {
-        backgroundColor: "rgba(13,121,24,0.58)"
+        marginRight: 2
+    }, selectedBadge: {
+        backgroundColor: "#4CAF50",marginRight: 2
     }, badgeText: {
-        fontSize: 15, paddingVertical: 4, paddingHorizontal: 5
+        fontSize: 12, paddingVertical: 3, paddingHorizontal: 2
     },
 
 });

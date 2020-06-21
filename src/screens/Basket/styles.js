@@ -10,7 +10,7 @@ export default styles = StyleSheet.create({
     itemStyle: {
         padding: 3
     }, iconContainer: {
-        flex: 3, paddingVertical: 5, textAlign: 'center', alignItems: 'center', alignContent: 'center'
+        flex: 5, paddingVertical: 1, textAlign: 'center', alignItems: 'center', alignContent: 'center'
     },
     title: {
         fontSize: 11.4,
@@ -21,12 +21,19 @@ export default styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 3,
         height: '100%'
-    }, itemQtyContainer: {
+    }, itemBoxContainer: {
+        flex: 5, flexDirection: 'row'
+    },
+    itemQtyContainer: {
         flex: 5,
         flexDirection: 'column',
-    }, input: {
-        fontSize: 20,
-        textAlign: 'center'
+    },inputContainer : {
+        flex: 1.3,justifyContent:'center',alignItems:'center'
+    },
+    input: {
+        fontSize: 14,
+        textAlign: 'center',
+        justifyContent: 'center'
     }, noItemONBasketText: {
         fontSize: 20,
         color: '#5a5a5a'

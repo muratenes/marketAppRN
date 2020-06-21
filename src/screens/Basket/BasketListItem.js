@@ -1,4 +1,4 @@
-import {Card, CardItem, Input, Item, Left, Right, Text, Thumbnail, View} from "native-base";
+import {Card, CardItem, Input, Item, Left, Right, Text, Thumbnail, View,Button} from "native-base";
 import styles from "./styles";
 import {TouchableOpacity} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -16,25 +16,19 @@ const BasketListItem = ({item, index}) => {
                     <View style={{flexDirection:'row',flex:4}}>
                         <Text style={styles.title}>{item.product.title}</Text>
                     </View>
-                    <View style={{flex: 10, flexDirection: 'row'}}>
+                    <View style={styles.itemBoxContainer}>
                         <View style={styles.iconContainer}>
-                            <TouchableOpacity onPress={() => BasketStore.decrementProductItem(item.product.id)}>
-                                <Icon name={'minus'} danger size={24}/>
-                            </TouchableOpacity>
+                            <Button bordered success small onPress={() => BasketStore.decrementProductItem(item.product.id)}>
+                                <Text><Icon name={'minus'} danger size={14}/></Text>
+                            </Button>
                         </View>
-                        <View style={{flex: 3}}>
-                            <Item>
-                                <Input placeholder={'adet'} style={styles.input} keyboardType={'numeric'} maxLength={30}
-                                       value={BasketStore.basketItems[index].qty + ""}
-                                       onChangeText={(value) => this.onChangeInputText(item, index, value)}
-
-                                />
-                            </Item>
+                        <View style={styles.inputContainer}>
+                                <Text style={styles.input}>{BasketStore.basketItems[index].qty}</Text>
                         </View>
                         <View style={styles.iconContainer}>
-                            <TouchableOpacity onPress={() => BasketStore.addToBasket(item.product.id, 1)}>
-                                <Icon name={'plus'} danger size={24}/>
-                            </TouchableOpacity>
+                            <Button bordered success small onPress={() => BasketStore.addToBasket(item.product.id, 1)}>
+                                <Text><Icon name={'plus'} danger size={14}/></Text>
+                            </Button>
                         </View>
                     </View>
 
@@ -47,7 +41,7 @@ const BasketListItem = ({item, index}) => {
                     </Left>
                     <Right>
                         <TouchableOpacity onPress={() => BasketStore.removeItemFromBasket(item.product.id)}>
-                            <Icon name={'trash'} danger size={30}/>
+                            <Icon name={'trash'} danger size={23}/>
                         </TouchableOpacity>
                     </Right>
 

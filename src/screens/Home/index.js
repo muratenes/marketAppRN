@@ -97,7 +97,6 @@ export default class Home extends Component {
 
     _getMoreProducts = async () => {
         if (!this.duringMomentum) {
-            console.log('çalıştı', this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage)
             if (this.props.ProductStore.selectedCategoryId) {
                 await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
             } else {

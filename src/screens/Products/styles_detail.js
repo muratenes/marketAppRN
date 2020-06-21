@@ -15,7 +15,8 @@ export const styles_detail = StyleSheet.create({
     }, title: {
         fontSize: 10,
         fontWeight: 'bold',
-        color: '#5e5e5e'
+        color: '#5e5e5e',
+        flex:4
     }, weightText: {
         fontSize: 8, color: '#9c9b9b'
     }, priceText: {
