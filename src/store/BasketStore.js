@@ -18,6 +18,7 @@ class BasketStore {
         const {data} = await axios.get(`${API_BASE}/basket`)
         runInAction(() => {
             if (data.status) {
+                console.log(data)
                 this.refreshing = false;
                 this.basket = data.data;
                 this.basketItems = data.data.items;

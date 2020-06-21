@@ -7,8 +7,6 @@ import {Provider} from "mobx-react";
 import Router from "./src/Router";
 import NavigationService from "./src/NavigationService";
 import store from './src/store/';
-import AuthStore from "./src/store/AuthStore";
-import PushNotificationAndroid from 'react-native-push-notification'
 import FirebaseService from './src/FirebaseService'
 import SocketService from "./src/SocketService";
 

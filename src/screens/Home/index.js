@@ -78,15 +78,15 @@ export default class Home extends Component {
                 <FlatList
                     columnWrapperStyle={{alignItems: 'flex-start'}}
                     horizontal={false}
-                    numColumns={2}
+                    numColumns={3}
                     refreshing={this.props.ProductStore.refreshing}
                     onRefresh={this.onRefresh}
                     ListFooterComponent={this.renderFooter}
                     renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
-                    keyExtractor={item => '' + item.id}
+                    keyExtractor={item => item.id.toString()}
                     data={this.props.ProductStore.products}
                     onEndReached={this._getMoreProducts}
-                    onEndReachedThreshold={.3}
+                    onEndReachedThreshold={0.6}
                     onMomentumScrollBegin={() => {
                         this.duringMomentum = false
                     }}

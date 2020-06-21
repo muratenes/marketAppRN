@@ -63,7 +63,7 @@ export default class LoginForm extends Component {
                                 onSubmitEditing={() => this.passwordRef._root.focus()}
                                 onChangeText={handleChange('username')}
                                 value={values.username}
-                                placeholder='username'
+                                placeholder='kullanıcı adı'
                                 onBlur={() => setFieldTouched('username')}
                                 autoCorrect={false}
                                 autoCapitalize={'none'}
@@ -79,7 +79,7 @@ export default class LoginForm extends Component {
                                 returnKeyType={'go'}
                                 onChangeText={handleChange('password')}
                                 value={values.password}
-                                placeholder='password'
+                                placeholder='parola'
                                 onBlur={() => setFieldTouched('password')}
                                 autoCapitalize={'none'}
                                 secureTextEntry={true}

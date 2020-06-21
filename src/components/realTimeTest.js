@@ -45,6 +45,11 @@ export default class realTimeTest extends Component {
                 })
 
             });
+        echo.connector.socket.on('connect', function () {
+            console.log('bağlandı')
+        }).on('disconnect', function () {
+            console.log('bağlanmadı')
+        })
     }
 
 

@@ -13,13 +13,13 @@ const BasketListItem = ({item, index}) => {
                     <View style={{flex: 3}}>
                         <Thumbnail source={{uri: item.product.image_url}}/>
                     </View>
-                    <View style={{flex: 8}}>
+                    <View style={{flexDirection:'row',flex:4}}>
                         <Text style={styles.title}>{item.product.title}</Text>
                     </View>
                     <View style={{flex: 10, flexDirection: 'row'}}>
                         <View style={styles.iconContainer}>
                             <TouchableOpacity onPress={() => BasketStore.decrementProductItem(item.product.id)}>
-                                <Icon name={'minus'} danger size={30}/>
+                                <Icon name={'minus'} danger size={24}/>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 3}}>
@@ -33,7 +33,7 @@ const BasketListItem = ({item, index}) => {
                         </View>
                         <View style={styles.iconContainer}>
                             <TouchableOpacity onPress={() => BasketStore.addToBasket(item.product.id, 1)}>
-                                <Icon name={'plus'} danger size={30}/>
+                                <Icon name={'plus'} danger size={24}/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -42,7 +42,8 @@ const BasketListItem = ({item, index}) => {
 
                 <CardItem>
                     <Left>
-                        <Text>{item.total_price} ₺ </Text>
+                        <Text style={item.product.discount_price ? styles.priceTextWhenDiscount : styles.priceText}>{item.product.price} ₺</Text>
+                        {item.product.discount_price && <Text style={styles.discountPriceText}>{item.product.discount_price} ₺</Text>}
                     </Left>
                     <Right>
                         <TouchableOpacity onPress={() => BasketStore.removeItemFromBasket(item.product.id)}>
@@ -61,7 +62,7 @@ onChangeInputText = (item, index, value) => {
     BasketStore.basketItems = BasketStore.basketItems.map((itemData: any) => {
         let qty = parseInt(itemData.id === item.id ? value : itemData.qty);
         qty = !isNaN(qty) ? qty : '';
-        return {"id": itemData.id, "qty": qty, 'price': itemData.price, 'total_price': itemData.total_price, "product": itemData.product};
+        return {"id": itemData.id,"product_id":itemData.product.id, "qty": qty, 'price': itemData.price, 'total_price': itemData.total_price, "product": itemData.product};
     });
     BasketStore.hasBasketItemQtyChange = true;
 }

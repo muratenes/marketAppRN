@@ -76,7 +76,7 @@ export default class BasketList extends Component {
                             <View style={{flex: this.state.accordionFlex === this.state.accordionFlexDefaultValue ? 9 : 2}}>
                                 <TouchableOpacity style={{flex: 10, flexDirection: 'row'}} onPress={() => this.showOrHideAccordion()}>
                                     <View style={{flex: 4}}><Text>Toplam Tutar : </Text></View>
-                                    <View style={{flex: 2}}><Text style={{fontSize: 15}}>{BasketStore.basket.total_price} ₺</Text></View>
+                                    <View style={{flex: 2}}><Text style={{fontSize: 15}}>{parseFloat(BasketStore.basket.total_price ? BasketStore.basket.total_price :  0).toFixed(2)} ₺</Text></View>
                                     <View style={{flex: 4}}>
                                         {this.props.BasketStore.hasBasketItemQtyChange &&
                                         <Button success small disabled={this.props.BasketStore.loading}
@@ -110,7 +110,7 @@ export default class BasketList extends Component {
                             />
                         }>
                             <FlatList data={BasketStore.basketItems}
-                                      keyExtractor={item => item.id}
+                                      keyExtractor={item => item.id+''}
                                       renderItem={({item, index}) => <BasketListItem item={item} index={index}/>}
                             />
                         </ScrollView>

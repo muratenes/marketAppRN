@@ -19,7 +19,6 @@ const ProductDetailListItem = ({item, maxWidth}) => (
                 </View>
                 <View style={styles_detail.textContainer}>
                     <Text style={styles_detail.title}>{item.title}</Text>
-                    <Text style={styles_detail.weightText}>{item.gram}</Text>
                     <View style={{flex: 2, flexDirection: 'row'}}>
                         <Text style={item.discount_price ? styles_detail.priceTextWhenDiscount : styles_detail.priceText}>{item.price} ₺</Text>
                         {item.discount_price && <Text style={styles_detail.discountPriceText}>{item.discount_price} ₺</Text>}

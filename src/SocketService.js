@@ -35,6 +35,11 @@ async function storeOrderSocketIoInitialize() {
                         buttonStyle: {backgroundColor: "#5cb85c"}
                     })
                 });
+            echo.connector.socket.on('connect', function () {
+                console.log('bağlandı')
+            }).on('disconnect', function () {
+                console.log('bağlanmadı')
+            })
         }
     }
 

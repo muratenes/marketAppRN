@@ -8,6 +8,7 @@ import {name as appName} from './app.json';
 import AuthStore from "./src/store/AuthStore";
 import axios from 'axios';
 import {Toast} from "native-base";
+console.disableYellowBox = true;
 
 AppRegistry.registerComponent(appName, () => App);
 
