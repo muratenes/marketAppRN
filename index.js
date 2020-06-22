@@ -24,7 +24,6 @@ axios.interceptors.request.use(request => {
 axios.interceptors.response.use((response) => {
     return response;
 }, (error) => {
-    // alert(error)
     if (error.response.status === 400) {
         if (error.response.data.hasOwnProperty("validation_errors")) {
             var errorText = "";

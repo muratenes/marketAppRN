@@ -51,7 +51,7 @@ export default class BasketList extends Component {
                 alert(data.message)
             } else {
                 this.props.BasketStore.basket = data.data.basket
-                this.props.BasketStore.basketItems = data.data.basket.items
+                this.props.BasketStore.basketItems = [];
                 this.props.OrderStore.getOrders();
                 alert('sipariş başarılı şekilde alındı')
                 this.setState({loading: false, orderNote: '', accordionFlex: 1})
