@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Navbar from '../../components/Navbar';
 import {View, Text} from 'react-native';
-import {Button, Container, Content, Input, Item, Picker, Spinner,Label} from 'native-base';
+import {Button, Container, Content, Input, Item, Picker, Spinner, Label} from 'native-base';
 import {inject, observer} from "mobx-react";
 import {Formik} from "formik";
 import profileValidation from "../Profile/profileValidation";
@@ -170,7 +170,7 @@ export default class Profile extends Component {
                                     style={{marginTop: 10}}>
 
                                     {isSubmitting && <Spinner size={'small'} color={'white'}/>}
-                                    <Text style={{color:'white'}}>Güncelle</Text>
+                                    <Text style={{color: 'white'}}>Güncelle</Text>
                                 </Button>
                             </Content>
                         )}
@@ -179,7 +179,10 @@ export default class Profile extends Component {
             );
         } else {
             return (
-                <AuthLoading/>
+                <ScrollView>
+                    <Navbar title={'Profil'}/>
+                    <AuthLoading/>
+                </ScrollView>
             );
         }
 

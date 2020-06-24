@@ -12,6 +12,7 @@ import BasketStore from "../../store/BasketStore";
 import styles from "./styles";
 import BasketListItem from "./BasketListItem";
 import EmptyBasket from "./EmptyBasket";
+import AuthLoading from "../AuthLoading";
 
 @inject("BasketStore", "OrderStore")
 @observer
@@ -48,7 +49,6 @@ export default class BasketList extends Component {
             const {data} = await axios.post(`${API_BASE}/orders/create`, {orderNote: this.state.orderNote})
             if (!data.status) {
                 this.setState({loading: false, orderNote: ''})
-                alert(data.message)
             } else {
                 this.props.BasketStore.basket = data.data.basket
                 this.props.BasketStore.basketItems = [];
@@ -69,12 +69,13 @@ export default class BasketList extends Component {
         return (
             <Container>
                 <Navbar title={'Sepetim'}/>
-                {BasketStore.basketItems.length > 0 && BasketStore.basket &&
+                {BasketStore.loading && <AuthLoading/>}
+                {BasketStore.basketItems.length > 0 && !BasketStore.loading &&
                 <View style={{flex: 10, flexDirection: 'column'}}>
                     <View style={{flex: this.state.accordionFlex}}>
                         <View style={styles.basketDetailContainer}>
                             <View style={{flex: this.state.accordionFlex === this.state.accordionFlexDefaultValue ? 9 : 2}}>
-                                <TouchableOpacity style={{flex: 10, flexDirection: 'row'}} onPress={() => this.showOrHideAccordion()}>
+                                <TouchableOpacity style={{flex: 10, flexDirection: 'row'}} onPress={this.showOrHideAccordion}>
                                     <View style={{flex: 4}}><Text>Toplam Tutar : </Text></View>
                                     <View style={{flex: 2}}><Text style={{fontSize: 15}}>{parseFloat(BasketStore.basket.total_price ? BasketStore.basket.total_price : 0).toFixed(2)} ₺</Text></View>
                                     <View style={{flex: 4}}>
@@ -106,7 +107,7 @@ export default class BasketList extends Component {
                         <ScrollView refreshControl={
                             <RefreshControl
                                 refreshing={this.props.BasketStore.refreshing}
-                                onRefresh={() => this.props.BasketStore.getBasket}
+                                onRefresh={this.props.BasketStore.getBasket}
                             />
                         }>
                             <FlatList data={BasketStore.basketItems}
@@ -116,8 +117,7 @@ export default class BasketList extends Component {
                         </ScrollView>
                     </View>
                 </View>}
-                {BasketStore.basketItems.length === 0 &&
-                <EmptyBasket/>
+                {BasketStore.basketItems.length === 0 && !BasketStore.loading && <EmptyBasket/>
                 }
             </Container>
         );

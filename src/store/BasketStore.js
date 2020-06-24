@@ -14,24 +14,24 @@ class BasketStore {
 
     @action
     async getBasket() {
-        this.refreshing = true;
+        this.refreshing = this.loading = true;
         const {data} = await axios.get(`${API_BASE}/basket`)
         runInAction(() => {
+            this.refreshing = this.loading = false;
             if (data.status) {
-                this.refreshing = false;
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            } else {
-                this.refreshing = false;
-                alert(data.message)
             }
         })
     }
 
     @action
     async addToBasket(productId, qty) {
+        this.loading = true;
         const {data} = await axios.post(`${API_BASE}/addToBasket/${productId}`, {qty})
+
         runInAction(() => {
+            this.loading = false;
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
@@ -43,14 +43,14 @@ class BasketStore {
 
     @action
     async updateBasketItemQty(productId, qty) {
+        this.loading = true;
         const {data} = await axios.post(`${API_BASE}/updateBasketItemQty/${productId}`, {qty})
         runInAction(() => {
+            this.loading = false;
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
                 showSuccessToastMessage('sepet güncellendi')
-            } else {
-                alert(data.message)
             }
         })
     }
@@ -74,21 +74,23 @@ class BasketStore {
 
     @action
     async decrementProductItem(productId) {
+        this.loading = true;
         const {data} = await axios.post(`${API_BASE}/decrementProductItem/${productId}`)
         runInAction(() => {
+            this.loading = false;
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;
-            } else {
-                alert(data.message)
             }
         })
     }
 
     @action
     async removeItemFromBasket(productId) {
+        this.loading = true;
         const {data} = await axios.delete(`${API_BASE}/removeFromBasket/${productId}`)
         runInAction(() => {
+            this.loading = false;
             if (data.status) {
                 this.basket = data.data;
                 this.basketItems = data.data.items;

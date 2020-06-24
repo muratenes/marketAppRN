@@ -32,7 +32,7 @@ export default class OrderList extends Component {
         if (OrderStore.loading === false) {
             return (
                 <Container>
-                    <Navbar title={'Sepetim'}/>
+                    <Navbar title={'Siparişlerim'}/>
                     {OrderStore.orders.length > 0 && <Container>
                         <Content padder>
                             <Accordion
@@ -54,7 +54,10 @@ export default class OrderList extends Component {
             );
         } else {
             return (
-                <AuthLoading/>
+                <Container>
+                    <Navbar title={'Siparişlerim'}/>
+                    <AuthLoading/>
+                </Container>
             );
         }
 
@@ -63,18 +66,18 @@ export default class OrderList extends Component {
     _renderContent(item) {
         const basketItemRender = item.basket.items.map(basketItemRender => (
             <View style={styles.tableItemContainer}>
-                <View style={[styles.tableContentItem,styles.flex5]}><Text>{basketItemRender.product.title}</Text></View>
-                <View style={[styles.tableContentItem,styles.flex3]}><Text>{basketItemRender.qty}</Text></View>
-                <View style={[styles.tableContentItem,styles.flex3]}><Text>{basketItemRender.total_price} ₺</Text></View>
+                <View style={[styles.tableContentItem, styles.flex5]}><Text>{basketItemRender.product.title}</Text></View>
+                <View style={[styles.tableContentItem, styles.flex3]}><Text>{basketItemRender.qty}</Text></View>
+                <View style={[styles.tableContentItem, styles.flex3]}><Text>{basketItemRender.total_price} ₺</Text></View>
             </View>
 
         ));
         return (
             <View style={{flex: 1, flexDirection: 'column'}}>
                 <View style={styles.tableHeaderContainer}>
-                    <View style={[styles.tableContentItem,styles.flex5]}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
-                    <View style={[styles.tableContentItem,styles.flex3]}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
-                    <View style={[styles.tableContentItem,styles.flex3]}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
+                    <View style={[styles.tableContentItem, styles.flex5]}><Text style={styles.tableHeaderItemText}>Ürün</Text></View>
+                    <View style={[styles.tableContentItem, styles.flex3]}><Text style={styles.tableHeaderItemText}>Adet</Text></View>
+                    <View style={[styles.tableContentItem, styles.flex3]}><Text style={styles.tableHeaderItemText}>Toplam</Text></View>
                 </View>
                 {basketItemRender}
             </View>

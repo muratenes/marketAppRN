@@ -91,7 +91,7 @@ export default class Home extends Component {
                     keyExtractor={item => item.id+''}
                     data={this.props.ProductStore.products}
                     onEndReached={this._getMoreProducts}
-                    onEndReachedThreshold={15}
+                    onEndReachedThreshold={4}
                     onMomentumScrollBegin={this._onMomentumScrollBegin}
                 />
             </View>
