@@ -5,8 +5,9 @@ import ProductDetailListItem from "../Products/ProductDetailListItem";
 import {Header, Item, Button, Input, Icon} from 'native-base';
 import {RefreshControl} from 'react-native';
 import CategoriesLabels from "../../components/CategoriesLabels";
+import ChildProductItem from "../Products/ChildProductItem";
 
-@inject("ProductStore")
+@inject("ProductStore","BasketStore")
 @observer
 export default class Home extends Component {
 
@@ -86,7 +87,7 @@ export default class Home extends Component {
                     refreshing={this.props.ProductStore.refreshing}
                     onRefresh={this.onRefresh}
                     ListFooterComponent={this.renderFooter}
-                    renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={this.state.maxWidth}/>}
+                    renderItem={({item}) => <ChildProductItem item={item} maxWidth={this.state.maxWidth} BasketStore={this.props.BasketStore}/>}
                     keyExtractor={item => item.id+''}
                     data={this.props.ProductStore.products}
                     onEndReached={this._getMoreProducts}
