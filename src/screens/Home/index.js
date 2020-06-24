@@ -4,15 +4,15 @@ import {inject, observer} from "mobx-react";
 import ProductDetailListItem from "../Products/ProductDetailListItem";
 import {Header, Item, Button, Input, Icon} from 'native-base';
 import {RefreshControl} from 'react-native';
-import UserStore from "../../store/UserStore";
 import CategoriesLabels from "../../components/CategoriesLabels";
 
-@inject("ProductStore", "UserStore", "CategoryStore")
+@inject("ProductStore")
 @observer
 export default class Home extends Component {
 
     state = {
         text: '',
+        maxWidth : 0
     }
 
     constructor(props) {
@@ -20,14 +20,15 @@ export default class Home extends Component {
         this.textRef = React.createRef();
     }
 
-     componentDidMount(): void {
+    componentDidMount(): void {
         this.props.ProductStore.getProducts();
+        this.setState({maxWidth : Dimensions.get('window').width / 3})
         //this.props.UserStore.getUserFromSession();
     }
 
     onRefresh = async () => {
-        await this.props.ProductStore.setCurrentCategoryValue(0);
-        await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
+        // await this.props.ProductStore.setCurrentCategoryValue(0);
+        // await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
         await this.props.ProductStore.getProducts(1);
     };
 
@@ -46,22 +47,25 @@ export default class Home extends Component {
 
     _onChangeText = (text) => {
         this.setState({text}, async function () {
-            await this.props.ProductStore.setCurrentCategoryValue(0)
-            const newCats = this.props.CategoryStore.categories;
-            await this.props.CategoryStore.setCategories(newCats.slice(0, newCats.length))
+            // await this.props.ProductStore.setCurrentCategoryValue(0)
+            // const newCats = this.props.CategoryStore.categories;
+            // await this.props.CategoryStore.setCategories(newCats.slice(0, newCats.length))
             await this.props.ProductStore.getProducts(1, this.state.text);
         })
     }
 
+    _onRefreshControl = () => {
+        return (
+            <RefreshControl
+                refreshing={this.props.ProductStore.refreshing}
+                onRefresh={this.onRefresh}
+            />
+        );
+    }
+
     render() {
         return (
-            <View style={styles.container} refreshControl={
-                <RefreshControl
-                    refreshing={this.props.ProductStore.refreshing}
-                    onRefresh={this.onRefresh}
-                />
-
-            }>
+            <View style={styles.container} refreshControl={this._onRefreshControl}>
                 <Header searchBar rounded>
                     <Item>
                         <Icon name="search" size={23}/>
@@ -82,17 +86,19 @@ export default class Home extends Component {
                     refreshing={this.props.ProductStore.refreshing}
                     onRefresh={this.onRefresh}
                     ListFooterComponent={this.renderFooter}
-                    renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
-                    keyExtractor={item => item.id.toString()}
+                    renderItem={({item}) => <ProductDetailListItem item={item} maxWidth={this.state.maxWidth}/>}
+                    keyExtractor={item => item.id+''}
                     data={this.props.ProductStore.products}
                     onEndReached={this._getMoreProducts}
-                    onEndReachedThreshold={0.6}
-                    onMomentumScrollBegin={() => {
-                        this.duringMomentum = false
-                    }}
+                    onEndReachedThreshold={15}
+                    onMomentumScrollBegin={this._onMomentumScrollBegin}
                 />
             </View>
         );
+    }
+
+    _onMomentumScrollBegin = () => {
+        this.duringMomentum = false;
     }
 
     _getMoreProducts = async () => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ScrollView, Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
 import {Badge, Button} from 'native-base';
 import {inject, observer} from "mobx-react";
 
@@ -35,8 +35,8 @@ export default class CategoriesLabels extends Component {
         return (
             <Button onPress={async () => {
                 if (this.props.ProductStore.selectedCategoryId === item.id) {
-                    await this.props.ProductStore.setCurrentCategoryValue(0)
-                    await this.props.ProductStore.getProducts(1)
+                    // await this.props.ProductStore.setCurrentCategoryValue(0)
+                    await this.props.ProductStore.getStoreProductsByCategoryId(0,1)
                 } else {
                     await this.props.ProductStore.getStoreProductsByCategoryId(item.id, 1);
                 }

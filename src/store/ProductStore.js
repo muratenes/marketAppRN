@@ -23,11 +23,11 @@ class ProductStore {
 
     @action
     async getProducts(page = 1,query = '') {
-        this.loading = this.refreshing = true;
+        this.loading = true;
         this.currentPage = page;
         const {data} = await axios.get(`${API_BASE}/products?page=${page}&q=${query}`)
         runInAction(() => {
-            this.loading = this.refreshing = false;
+            this.loading = false;
             this.products = page === 1 ? data.data.data : [...this.products, ...data.data.data];
         })
     }
