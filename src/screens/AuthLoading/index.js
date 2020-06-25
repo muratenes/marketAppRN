@@ -11,7 +11,7 @@ export default class AuthLoading extends Component {
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',marginTop:35}}>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',marginTop:45}}>
                 <Image source={require('../../assets/img/loading.gif')}/>
             </View>
         );

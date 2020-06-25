@@ -3,7 +3,6 @@ import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
 import {Badge, Button} from 'native-base';
 import {inject, observer} from "mobx-react";
 
-@inject("ProductStore")
 @observer
 export default class CategoriesLabels extends Component {
     componentDidMount(): void {
@@ -33,17 +32,22 @@ export default class CategoriesLabels extends Component {
 
     _renderItem = (item) => {
         return (
-            <Button onPress={async () => {
-                if (this.props.ProductStore.selectedCategoryId === item.id) {
-                    // await this.props.ProductStore.setCurrentCategoryValue(0)
-                    await this.props.ProductStore.getStoreProductsByCategoryId(0,1)
-                } else {
-                    await this.props.ProductStore.getStoreProductsByCategoryId(item.id, 1);
-                }
-                await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
-            }} small bordered success style={this.props.ProductStore.selectedCategoryId === item.id ? styles.selectedBadge : styles.badge}>
+            <Button onPress={()=> this._categoryButtonOnClick(item)} small bordered success style={this.props.ProductStore.selectedCategoryId === item.id ? styles.selectedBadge : styles.badge}>
                     <Text style={styles.badgeText}>{item.title + "|" + item.id}</Text>
             </Button>);
+    }
+
+    _categoryButtonOnClick = async (item) => {
+        this.props.flatlistref.scrollToOffset({y: 0, animated: true});
+        // console.log(item.id);
+
+        if (this.props.ProductStore.selectedCategoryId === item.id) {
+            await this.props.ProductStore.getStoreProductsByCategoryId(0,1)
+        } else {
+            await this.props.ProductStore.getStoreProductsByCategoryId(item.id, 1);
+        }
+        // await this.props.ProductStore.setCurrentCategoryValue(this.props.ProductStore.selectedCategoryId === item.id ? 0 : item.id)
+        await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
     }
 }
 
