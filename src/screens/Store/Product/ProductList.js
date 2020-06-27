@@ -21,12 +21,12 @@ export default class ProductList extends Component {
     }
 
     componentDidMount(): void {
-        this.props.ProductStore.getProducts();
+        this.props.ProductStore.getStoreProducts();
         this.setState({maxWidth : Dimensions.get('window').width / 3})
     }
 
     onRefresh = async () => {
-        await this.props.ProductStore.getProducts(1);
+        await this.props.ProductStore.getStoreProducts(1);
         await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
     };
 
@@ -40,13 +40,13 @@ export default class ProductList extends Component {
 
     _clearInputText = async () => {
         this.setState({text: ''});
-        await this.props.ProductStore.getProducts(1)
+        await this.props.ProductStore.getStoreProducts(1)
     }
 
     _onChangeText = (text) => {
         this.setState({text}, async function () {
             this.flatlistref.scrollToOffset({y: 0, animated: true});
-            await this.props.ProductStore.getProducts(1, this.state.text);
+            await this.props.ProductStore.getStoreProducts(1, this.state.text);
         })
     }
 
@@ -105,7 +105,7 @@ export default class ProductList extends Component {
                 await this.props.ProductStore.getStoreProductsByCategoryId(this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
             } else {
                 if (this.props.ProductStore.selectedCategoryId !== undefined) {
-                    await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1, this.state.text);
+                    await this.props.ProductStore.getStoreProducts(this.props.ProductStore.currentPage + 1, this.state.text);
                 }
             }
             this.duringMomentum = true;

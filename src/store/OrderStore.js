@@ -59,16 +59,15 @@ class OrderStore {
 
     @action
     async updateOrderStatus(orderId, status) {
+        this.loading = true;
         const {data} = await axios.post(`${API_BASE}/store/updateOrderStatus`, {order_id: orderId, status: status})
         runInAction(() => {
+            this.loading = false;
             if (data.status) {
                 this.orders = data.data.orders;
                 this.pendingOrderCount = data.data.pendingOrderCount;
                 alert(data.message)
-            } else {
-                alert(data.message)
             }
-
         })
     }
 

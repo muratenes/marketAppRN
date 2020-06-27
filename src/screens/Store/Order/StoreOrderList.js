@@ -33,20 +33,21 @@ export default class StoreOrderList extends Component {
             return (
                 <Container>
                     <StoreNavbar title={'Siparişlerim'}/>
-                    {OrderStore.orders.length > 0 && <Container>
-                        <Content padder>
-                            <Accordion
-                                refreshing={OrderStore.refreshing}
-                                onRefresh={this.onRefresh}
-                                dataArray={OrderStore.orders}
-                                iconStyle={{color: "green"}}
-                                expandedIconStyle={{color: "red"}}
-                                renderHeader={this._renderHeader}
-                                renderContent={this._renderContent}
-                                key={item => item.id}
-                            />
-                        </Content>
-                    </Container>}
+                    {OrderStore.orders.length > 0 &&
+                        <Container>
+                            <Content padder>
+                                <Accordion
+                                    refreshing={OrderStore.refreshing}
+                                    onRefresh={this.onRefresh}
+                                    dataArray={OrderStore.orders}
+                                    iconStyle={{color: "green"}}
+                                    expandedIconStyle={{color: "red"}}
+                                    renderHeader={this._renderHeader}
+                                    renderContent={this._renderContent}
+                                    key={item => item.id+''}
+                                />
+                            </Content>
+                        </Container>}
                     {OrderStore.orders.length === 0 &&
                     <StoreEmptyOrder/>
                     }
@@ -87,8 +88,9 @@ export default class StoreOrderList extends Component {
                 </View>
                 {basketItemRender}
                 <View style={styles.tableFooterContainer}>
-                    <Button small info style={styles.tableFooterApproveButton} disabled={item.status === OrderStore.STATUS_ONAYLANDI || item.status === OrderStore.STATUS_TAMAMLANDI}>
-                        <Text onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_ONAYLANDI)}>Onayla</Text>
+                    <Button small info style={styles.tableFooterApproveButton} disabled={item.status === OrderStore.STATUS_ONAYLANDI || item.status === OrderStore.STATUS_TAMAMLANDI}
+                            onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_ONAYLANDI)}>
+                        <Text >Onayla</Text>
                     </Button>
                     <Button small success style={styles.tableFooterCompleteButton} disabled={item.status === OrderStore.STATUS_TAMAMLANDI}
                             onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_TAMAMLANDI)}>
@@ -98,7 +100,6 @@ export default class StoreOrderList extends Component {
             </View>
         );
     }
-
 
     _renderHeader(item, expanded) {
         const itemColors = OrderStore.statusList.find(elem => elem.name === item.status);
@@ -116,6 +117,11 @@ export default class StoreOrderList extends Component {
                 {expanded ? <Icon style={{fontSize: 18}} name="angle-up"/> : <Icon style={{fontSize: 18}} name="angle-down"/>}
             </View>
         );
+    }
+
+
+    _navigateToProduct = (product) => {
+        NavigationService.navigate('StoreProductDetail', {item: product});
     }
 }
 

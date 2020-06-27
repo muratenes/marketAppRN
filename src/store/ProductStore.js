@@ -36,12 +36,16 @@ class ProductStore {
     }
 
     @action
-    async getStoreProducts() {
-        this.loading = this.refreshing = true;
-        const {data} = await axios.get(`${API_BASE}/store/products`)
+    async getStoreProducts(page = 1,query = '') {
+        this.loading = true;
+        this.currentPage = page;
+        if (page === 1) {
+            this.selectedCategoryId = 0;
+        }
+        const {data} = await axios.get(`${API_BASE}/store/products?page=${page}&q=${query}`)
         runInAction(() => {
-            this.loading = this.refreshing = false;
-            this.products = data.data
+            this.loading = false;
+            this.products = page === 1 ? data.data.data : [...this.products, ...data.data.data];
         })
     }
 

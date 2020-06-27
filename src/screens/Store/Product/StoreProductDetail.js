@@ -65,7 +65,6 @@ export default class StoreProductDetail extends Component {
             const productId = this.props.navigation.getParam('item').id;
             const {data} = await axios.post(`${API_BASE}/store/updateStoreProduct/${productId}`, requestData);
             if (data.status) {
-                this.props.ProductStore.products = data.data.products;
                 if (this.state.item.id === 0)
                     NavigationService.navigate('StoreProductDetail', {item: data.data.product})
                 else
@@ -135,7 +134,7 @@ export default class StoreProductDetail extends Component {
                 <Card style={{alignContent: 'center'}}>
                     {item.id !== 0 &&
                     <View style={{flex: 12, flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.productImageContainer} onPress={this._onSelectPicture}>
+                        <TouchableOpacity style={styles.productImageContainer}>
                             {this.state.item.image !== "" && !this.state.loading &&
                             <Thumbnail source={{uri: this.state.item.image_url}} style={styles.productImage}/>}
                             {this.state.item.image === "" && !this.state.loading &&
