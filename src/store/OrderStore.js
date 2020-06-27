@@ -41,7 +41,10 @@ class OrderStore {
         const {data} = await axios.get(`${API_BASE}/store/orders`)
         runInAction(() => {
             this.loading = this.refreshing = false;
-            this.orders = data.data
+            if (data.status) {
+                this.orders = data.data.orders
+                this.pendingOrderCount = data.data.pending_order_count
+            }
         })
     }
 

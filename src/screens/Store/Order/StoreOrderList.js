@@ -64,9 +64,9 @@ export default class StoreOrderList extends Component {
     _renderContent(item) {
         const basketItemRender = item.basket.items.map(basketItem => (
             <View style={styles.tableItemContainer}>
-                <View style={styles.tableContentItem}><TouchableOpacity onPress={() => NavigationService.navigate('StoreProductDetail', {item: basketItem.product})}><Text>{basketItem.product.title}</Text></TouchableOpacity></View>
-                <View style={styles.tableContentItem}><Text>{basketItem.qty}</Text></View>
-                <View style={styles.tableContentItem}><Text>{basketItem.total_price} ₺</Text></View>
+                <View style={[styles.tableContentItem, styles.flex5]}><TouchableOpacity onPress={() => NavigationService.navigate('StoreProductDetail', {item: basketItem.product})}><Text>{basketItem.product.title}</Text></TouchableOpacity></View>
+                <View style={[styles.tableContentItem, styles.flex3]}><Text>{basketItem.qty}</Text></View>
+                <View style={[styles.tableContentItem, styles.flex3]}><Text>{basketItem.total_price} ₺</Text></View>
             </View>
 
         ));

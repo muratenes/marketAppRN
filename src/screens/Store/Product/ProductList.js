@@ -1,38 +1,33 @@
 import React, {Component} from 'react';
-import {FlatList, ScrollView, View, RefreshControl, StyleSheet, Dimensions} from 'react-native';
+import {Keyboard, StyleSheet, Text, FlatList, ScrollView, View, Dimensions, Image} from 'react-native';
 import {inject, observer} from "mobx-react";
-import {Fab, Button, Text} from 'native-base';
-
-
+import {Header, Item, Button, Input, Icon} from 'native-base';
+import {RefreshControl} from 'react-native';
+import CategoriesLabels from "../../../components/CategoriesLabels";
 import StoreProductListItem from "./StoreProductListItem";
-import StoreNavbar from "../../../components/StoreNavbar";
-import NavigationService from "../../../NavigationService";
-import Icon from "react-native-vector-icons/FontAwesome";
-import {ROLE_STORE} from "../../../constants";
-import ProductDetailListItem from "../../Products/ProductDetailListItem";
 
-
-@inject("ProductStore", "UserStore", "OrderStore", "AuthStore")
+@inject("ProductStore","BasketStore")
 @observer
 export default class ProductList extends Component {
 
     state = {
         text: '',
-        active: false
+        maxWidth : 0
+    }
+
+    constructor(props) {
+        super(props);
+        this.textRef = React.createRef();
     }
 
     componentDidMount(): void {
         this.props.ProductStore.getProducts();
-
+        this.setState({maxWidth : Dimensions.get('window').width / 3})
     }
 
-    onRefresh = () => {
-        this.setState({
-            page: 1,
-            refreshing: true
-        }, () => {
-            this.props.ProductStore.getStoreProducts();
-        });
+    onRefresh = async () => {
+        await this.props.ProductStore.getProducts(1);
+        await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
     };
 
     renderFooter = () => {
@@ -42,58 +37,72 @@ export default class ProductList extends Component {
             </View>
         )
     };
-    redirectToAddNewProductPage = () => {
-        const item = {"id": 0, "title": "", "active": 1, "price": "0", "discount_price": null, "image": ""};
-        NavigationService.navigate('StoreProductDetail', {item})
+
+    _clearInputText = async () => {
+        this.setState({text: ''});
+        await this.props.ProductStore.getProducts(1)
+    }
+
+    _onChangeText = (text) => {
+        this.setState({text}, async function () {
+            this.flatlistref.scrollToOffset({y: 0, animated: true});
+            await this.props.ProductStore.getProducts(1, this.state.text);
+        })
+    }
+
+    _onRefreshControl = () => {
+        return (
+            <RefreshControl
+                refreshing={this.props.ProductStore.refreshing}
+                onRefresh={this.onRefresh}
+            />
+        );
     }
 
     render() {
         return (
-            <View style={{flex: 1}}>
-                <View refreshControl={
-                    <RefreshControl
-                        refreshing={this.props.ProductStore.refreshing}
-                        onRefresh={this.onRefresh}
-                    />
-                }>
-                    <StoreNavbar title={'Ürünlerim'}/>
-                    <FlatList
-                        columnWrapperStyle={{alignItems: 'flex-start'}}
-                        horizontal={false}
-                        numColumns={3}
-                        refreshing={this.props.ProductStore.refreshing}
-                        onRefresh={this.onRefresh}
-                        ListFooterComponent={this.renderFooter}
-                        renderItem={({item}) => <StoreProductListItem item={item} maxWidth={Dimensions.get('window').width / 3}/>}
-                        keyExtractor={item => '' + item.id}
-                        data={this.props.ProductStore.products}
-                        onEndReached={this._getMoreProducts}
-                        onEndReachedThreshold={.3}
-                        onMomentumScrollBegin={() => {
-                            this.duringMomentum = false
-                        }}
-                    />
-                </View>
-                {this.props.AuthStore.user.role_id === ROLE_STORE &&
-                <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{}}
-                    style={{backgroundColor: '#5067FF'}}
-                    position="bottomRight"
-                    onPress={this.redirectToAddNewProductPage}>
-                    <Icon name="plus"/>
-                </Fab>
-                }
+            <View style={styles.container} refreshControl={this._onRefreshControl}>
+                <Header searchBar rounded>
+                    <Item>
+                        <Icon name="search" size={23}/>
+                        <Input
+                            ref={this.textRef}
+                            placeholder="kola,süt,ekmek vb." onChangeText={text => this._onChangeText(text)} value={this.state.text}/>
+                        {this.state.text.length > 0 && <Icon name="close" size={30} onPress={this._clearInputText}/>}
+                    </Item>
+                    <Button transparent>
+                        <Text>Search</Text>
+                    </Button>
+                </Header>
+                {this.state.text === '' && <CategoriesLabels ProductStore={this.props.ProductStore} flatlistref={this.flatlistref}/>}
+                <FlatList
+                    ref={(ref) => this.flatlistref = ref}
+                    columnWrapperStyle={{alignItems: 'flex-start'}}
+                    horizontal={false}
+                    numColumns={3}
+                    refreshing={this.props.ProductStore.refreshing}
+                    onRefresh={this.onRefresh}
+                    ListFooterComponent={this.renderFooter}
+                    renderItem={({item}) => <StoreProductListItem item={item} maxWidth={this.state.maxWidth} BasketStore={this.props.BasketStore}/>}
+                    keyExtractor={item => item.id+''}
+                    data={this.props.ProductStore.products}
+                    onEndReached={this._getMoreProducts}
+                    onEndReachedThreshold={0.4}
+                    onMomentumScrollBegin={this._onMomentumScrollBegin}
+                />
             </View>
         );
     }
 
+    _onMomentumScrollBegin = () => {
+        this.duringMomentum = false;
+    }
+
     _getMoreProducts = async () => {
         if (!this.duringMomentum) {
-            console.log('çalıştı', this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage)
+
             if (this.props.ProductStore.selectedCategoryId) {
-                await this.props.ProductStore.getStoreProductsByCategoryId(this.props.CategoryStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
+                await this.props.ProductStore.getStoreProductsByCategoryId(this.props.ProductStore.selectedCategoryId, this.props.ProductStore.currentPage + 1);
             } else {
                 if (this.props.ProductStore.selectedCategoryId !== undefined) {
                     await this.props.ProductStore.getProducts(this.props.ProductStore.currentPage + 1, this.state.text);
@@ -103,3 +112,12 @@ export default class ProductList extends Component {
         }
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        height: '100%'
+    },
+    loading: {
+        textAlign: 'center'
+    }
+})

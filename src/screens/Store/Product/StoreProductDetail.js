@@ -1,29 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
-import {
-    Content,
-    Item,
-    Label,
-    Input,
-    Card,
-    Picker,
-    Button,
-    Spinner,
-    CheckBox,
-    Body,
-    Thumbnail,
-    Text,
-    Toast
-} from 'native-base';
+import {Content, Item, Label,Input,Card,Picker,Button,Spinner,CheckBox,Body,Thumbnail,Text,Toast} from 'native-base';
 import {Formik} from "formik";
 import axios from "axios";
 import {API_BASE, ROLE_STORE} from "../../../constants";
-import {
-    convertToFormData,
-    showAlertDialog,
-    showSuccessToastMessage,
-    showDangerToastMessage, showValidationToastMessage, showErrorApiResponseToastMessage
-} from "../../../helpers/helpers";
+import {convertToFormData,showAlertDialog,showSuccessToastMessage,showDangerToastMessage, showValidationToastMessage, showErrorApiResponseToastMessage} from "../../../helpers/helpers";
 import {inject} from "mobx-react";
 import ImagePicker from "react-native-image-picker";
 import {styles} from "./styles";
@@ -68,8 +49,6 @@ export default class StoreProductDetail extends Component {
 
     componentDidUpdate(): void {
         const item = this.props.navigation.getParam('item');
-        console.log(item)
-        console.log(item.id, this.state.item.id)
         if (this.state.item) {
             if (this.state.item.id !== item.id) {
                 this.setState({item});
@@ -164,11 +143,6 @@ export default class StoreProductDetail extends Component {
                             {this.state.loading && <Image source={require('../../../assets/img/mini_loading.gif')}
                                                           style={styles.productImageLoadingImage}/>}
                         </TouchableOpacity>
-                        <View style={{flex: 6}}>
-                            <Button onPress={this._onSelectPicture}>
-                                <Text>Yükle</Text>
-                            </Button>
-                        </View>
                     </View>}
 
                 </Card>}

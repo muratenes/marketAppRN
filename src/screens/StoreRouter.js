@@ -9,7 +9,6 @@ import Profile from './Store/Profile';
 
 import {createStackNavigator} from "react-navigation-stack";
 import StoreProductDetail from "./Store/Product/StoreProductDetail";
-import {inject, observer} from "mobx-react";
 import StoreOrderListBottomNavigator from "../components/StoreOrderListBottomNavigator";
 
 const ProductStackNavigator = createStackNavigator({
@@ -48,4 +47,4 @@ export const  appStoreStack = createBottomTabNavigator({
             tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
     }
-}, {headerLayoutPreset: 'center', initialRouteName: 'ProductList'})
+}, {headerLayoutPreset: 'center', initialRouteName: 'StoreOrderList'})

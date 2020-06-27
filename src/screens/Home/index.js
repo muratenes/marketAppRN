@@ -29,6 +29,7 @@ export default class Home extends Component {
 
     onRefresh = async () => {
         await this.props.ProductStore.getProducts(1);
+        await this.props.ProductStore.setCategories([...this.props.ProductStore.categories]);
     };
 
     renderFooter = () => {
