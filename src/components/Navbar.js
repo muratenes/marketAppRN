@@ -34,10 +34,14 @@ export default class Navbar extends Component {
                         <Icon name='shopping-basket' color={'white'} size={20}/>
                     </Button>
                     <Button transparent>
-                        <Icon name='sign-out' color={'white'} size={20} onPress={() => this.props.AuthStore.removeToken()}/>
+                        <Icon name='sign-out' color={'white'} size={20} onPress={this._logout}/>
                     </Button>
                 </Right>
             </Header>
         );
+    }
+
+    _logout = () => {
+        this.props.AuthStore.removeToken()
     }
 }

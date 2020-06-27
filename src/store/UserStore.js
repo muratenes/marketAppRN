@@ -13,6 +13,7 @@ class UserStore {
         const {data} = await axios.post(`${API_BASE}/details`)
         runInAction(() => {
             this.user = data.data
+            this.sessionUser = data.data
         })
     }
 
@@ -21,27 +22,9 @@ class UserStore {
         try {
             await AsyncStorage.setItem('user', JSON.stringify(userData))
             this.sessionUser = await AsyncStorage.getItem('user');
+            this.user = userData;
         } catch (e) {
             console.log('hata27',e)
-        }
-    }
-
-    @action
-    async getUserFromSession() {
-        try {
-            this.sessionUser = await JSON.parse(AsyncStorage.getItem('user'))
-        } catch (e) {
-            return null;
-        }
-    }
-
-    @action
-    async addUserIsStoreInfo(isStore) {
-        try {
-            this.sessionUser = await AsyncStorage.setItem('user', isStore)
-            //console.log(await AsyncStorage.getItem('user_store'))
-        } catch (e) {
-            console.log(e)
         }
     }
 }

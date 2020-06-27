@@ -29,6 +29,7 @@ class AuthStore {
     async removeToken() {
         await AsyncStorage.removeItem('token')
         await AsyncStorage.removeItem('user')
+        await AsyncStorage.removeItem('firebase_token')
         await this.getToken();
     }
 
@@ -75,14 +76,6 @@ class AuthStore {
         }
     }
 
-    @action
-    async getSessionUser() {
-        try {
-            this.user = await AsyncStorage.getItem('firebase_token')
-        }catch (e) {
-
-        }
-    }
 }
 
 export default new AuthStore();

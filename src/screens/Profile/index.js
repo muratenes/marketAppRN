@@ -23,7 +23,6 @@ export default class Profile extends Component {
             for (var k in getData) {
                 formData.append(k, getData[k])
             }
-            console.log(formData)
             const {data} = await axios.post(`${API_BASE}/saveUserDetail`, formData);
             if (!data.status) {
                 showErrorApiResponseToastMessage(data)
@@ -35,9 +34,16 @@ export default class Profile extends Component {
         }
     };
 
-    async componentDidMount(): void {
-        await this.props.UserStore.getUserDetail()
+    componentDidMount(): void {
+        this.props.UserStore.getUserDetail();
     }
+
+    componentDidUpdate(prevState,nextState): void {
+        console.log(prevState)
+        console.log(nextState)
+
+    }
+
 
     render() {
         const {UserStore} = this.props;
