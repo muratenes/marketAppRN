@@ -35,8 +35,8 @@ export default class Profile extends Component {
         }
     };
 
-    componentDidMount(): void {
-        this.props.UserStore.getUserDetail()
+    async componentDidMount(): void {
+        await this.props.UserStore.getUserDetail()
     }
 
     render() {

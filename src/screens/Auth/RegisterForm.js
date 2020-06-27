@@ -33,13 +33,11 @@ export default class RegisterForm extends Component {
             const {data} = await axios.post(`${API_BASE}/register`, formData);
             bag.setSubmitting(false);
             if (!data.status) {
-                showAlertDialog(data.message)
                 return false;
             }
             await this.props.UserStore.addUserToSession(data.data.user);
-            await this.props.AuthStore.saveToken(data.data.token)
+            await this.props.AuthStore.saveToken(data.data.token);
         } catch (e) {
-            alert(e)
         }
     };
 
@@ -66,13 +64,13 @@ export default class RegisterForm extends Component {
             return (
                 <Formik
                     initialValues={{
-                        username: 'berkay',
-                        password: '141277kk',
-                        c_password: '141277kk',
-                        name: 'berkay yahya',
-                        phone: '5310129339',
-                        address: 'beyazçam 59',
-                        store_code: '111111'
+                        username: '',
+                        password: '',
+                        c_password: '',
+                        name: '',
+                        phone: '',
+                        address: '',
+                        store_code: ''
                     }}
                     onSubmit={this._handleSubmit}
                     validationSchema={validations}
