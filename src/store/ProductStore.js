@@ -25,6 +25,9 @@ class ProductStore {
     async getProducts(page = 1,query = '') {
         this.loading = true;
         this.currentPage = page;
+        if (page === 1) {
+          this.selectedCategoryId = 0;
+        }
         const {data} = await axios.get(`${API_BASE}/products?page=${page}&q=${query}`)
         runInAction(() => {
             this.loading = false;

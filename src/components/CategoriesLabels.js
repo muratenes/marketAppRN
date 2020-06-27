@@ -33,7 +33,7 @@ export default class CategoriesLabels extends Component {
     _renderItem = (item) => {
         return (
             <Button onPress={()=> this._categoryButtonOnClick(item)} small bordered success style={this.props.ProductStore.selectedCategoryId === item.id ? styles.selectedBadge : styles.badge}>
-                    <Text style={styles.badgeText}>{item.title + "|" + item.id}</Text>
+                    <Text style={this.props.ProductStore.selectedCategoryId === item.id ? styles.selectedBadgeText : styles.badgeText}>{item.title + "|" + item.id}</Text>
             </Button>);
     }
 
@@ -53,14 +53,16 @@ export default class CategoriesLabels extends Component {
 
 const styles = StyleSheet.create({
     badgeContainer: {
-        paddingHorizontal: 3, paddingVertical: 4, flexDirection: 'row',
+        paddingHorizontal: 5, paddingVertical: 5, flexDirection: 'row',
     },
     badge: {
         marginRight: 2
     }, selectedBadge: {
-        backgroundColor: "#4CAF50",marginRight: 2
+        backgroundColor: "#3949AB",marginRight: 2
     }, badgeText: {
         fontSize: 12, paddingVertical: 3, paddingHorizontal: 2
-    },
+    },selectedBadgeText : {
+        fontSize: 12, paddingVertical: 3, paddingHorizontal: 2,color:'white'
+    }
 
 });
