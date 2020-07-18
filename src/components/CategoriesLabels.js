@@ -53,7 +53,7 @@ export default class CategoriesLabels extends Component {
 
 const styles = StyleSheet.create({
     badgeContainer: {
-        paddingHorizontal: 5, paddingVertical: 5, flexDirection: 'row',
+        paddingHorizontal: 7, paddingVertical: 7, flexDirection: 'row',
     },
     badge: {
         marginRight: 2
