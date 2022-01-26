@@ -64,13 +64,14 @@ export default class RegisterForm extends Component {
             return (
                 <Formik
                     initialValues={{
-                        username: '',
-                        password: '',
-                        c_password: '',
-                        name: '',
-                        phone: '',
-                        address: '',
-                        store_code: ''
+                        username: 'murat',
+                        email : 'murat@gmail.com',
+                        password: '141277kk',
+                        c_password: '141277kk',
+                        name: 'murat enes',
+                        phone: '5310129339',
+                        address: 'adres bilgileri',
+                        store_code: 'FRH245'
                     }}
                     onSubmit={this._handleSubmit}
                     validationSchema={validations}
@@ -111,7 +112,7 @@ export default class RegisterForm extends Component {
                                 <Input
                                     ref={ref => this.username = ref}
                                     returnKeyType={'next'}
-                                    onSubmitEditing={() => this.passwordRef._root.focus()}
+                                    onSubmitEditing={() => this.email._root.focus()}
                                     onChangeText={handleChange('username')}
                                     value={values.username}
                                     placeholder='Kullanıcı Adı'
@@ -122,6 +123,22 @@ export default class RegisterForm extends Component {
 
                                 {(errors.username && touched.username) &&
                                 <Text style={{color: 'red'}}>{errors.username}</Text>}
+                            </Item>
+                            <Item error={errors.email && touched.email}>
+                                <Input
+                                    ref={ref => this.email = ref}
+                                    returnKeyType={'next'}
+                                    onSubmitEditing={() => this.passwordRef._root.focus()}
+                                    onChangeText={handleChange('email')}
+                                    value={values.email}
+                                    placeholder='Email'
+                                    onBlur={() => setFieldTouched('email')}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                />
+
+                                {(errors.email && touched.email) &&
+                                <Text style={{color: 'red'}}>{errors.email}</Text>}
                             </Item>
 
                             <Item error={errors.password && touched.password}>

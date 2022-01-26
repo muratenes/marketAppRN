@@ -34,20 +34,20 @@ export default class StoreOrderList extends Component {
                 <Container>
                     <StoreNavbar title={'Siparişlerim'}/>
                     {OrderStore.orders.length > 0 &&
-                        <Container>
-                            <Content padder>
-                                <Accordion
-                                    refreshing={OrderStore.refreshing}
-                                    onRefresh={this.onRefresh}
-                                    dataArray={OrderStore.orders}
-                                    iconStyle={{color: "green"}}
-                                    expandedIconStyle={{color: "red"}}
-                                    renderHeader={this._renderHeader}
-                                    renderContent={this._renderContent}
-                                    key={item => item.id+''}
-                                />
-                            </Content>
-                        </Container>}
+                    <Container>
+                        <Content padder>
+                            <Accordion
+                                refreshing={OrderStore.refreshing}
+                                onRefresh={this.onRefresh}
+                                dataArray={OrderStore.orders}
+                                iconStyle={{color: "green"}}
+                                expandedIconStyle={{color: "red"}}
+                                renderHeader={this._renderHeader}
+                                renderContent={this._renderContent}
+                                key={item => item.id + ''}
+                            />
+                        </Content>
+                    </Container>}
                     {OrderStore.orders.length === 0 &&
                     <StoreEmptyOrder/>
                     }
@@ -55,7 +55,10 @@ export default class StoreOrderList extends Component {
             );
         } else {
             return (
-                <AuthLoading/>
+                <Container>
+                    <StoreNavbar title={'Siparişlerim'}/>
+                    <AuthLoading/>
+                </Container>
             );
         }
 
@@ -90,7 +93,7 @@ export default class StoreOrderList extends Component {
                 <View style={styles.tableFooterContainer}>
                     <Button small info style={styles.tableFooterApproveButton} disabled={item.status === OrderStore.STATUS_ONAYLANDI || item.status === OrderStore.STATUS_TAMAMLANDI}
                             onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_ONAYLANDI)}>
-                        <Text >Onayla</Text>
+                        <Text>Onayla</Text>
                     </Button>
                     <Button small success style={styles.tableFooterCompleteButton} disabled={item.status === OrderStore.STATUS_TAMAMLANDI}
                             onPress={() => OrderStore.updateOrderStatus(item.id, OrderStore.STATUS_TAMAMLANDI)}>

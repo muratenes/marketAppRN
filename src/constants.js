@@ -1,5 +1,5 @@
-export const API_BASE = "http://sitemarketim.tk/api";
-export const WEB_BASE = "http://sitemarketim.tk";
+export const API_BASE = "https://sitemarketim.tk/api";
+export const WEB_BASE = "https://sitemarketim.tk";
 export const REDIS_IP = "79.143.186.25";
 export const REDIS_PORT = "6001";
 export const ICON_SIZE = 20;

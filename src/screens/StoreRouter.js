@@ -47,4 +47,4 @@ export const  appStoreStack = createBottomTabNavigator({
             tabBarIcon: ({tintColor}) => <Icon name={'user'} style={{color: tintColor}} size={22}/>
         }
     }
-}, {headerLayoutPreset: 'center', initialRouteName: 'ProductList'})
+}, {headerLayoutPreset: 'center', initialRouteName: 'StoreOrderList'})

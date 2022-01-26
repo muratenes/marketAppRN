@@ -38,11 +38,6 @@ export default class Profile extends Component {
         this.props.UserStore.getUserDetail();
     }
 
-    componentDidUpdate(prevState,nextState): void {
-        console.log(prevState)
-        console.log(nextState)
-
-    }
 
 
     render() {
@@ -55,6 +50,7 @@ export default class Profile extends Component {
                     <Formik
                         initialValues={{
                             username: user.username,
+                            email: user.email,
                             password: '',
                             password_confirmation: '',
                             name: user.name,
@@ -90,6 +86,23 @@ export default class Profile extends Component {
 
                                     {(errors.username && touched.username) &&
                                     <Text style={{color: 'red'}}>{errors.username}</Text>}
+                                </Item>
+                                <Item error={errors.email && touched.email} stackedLabel>
+                                    <Label>Email</Label>
+                                    <Input
+                                        ref={ref => this.email = ref}
+                                        returnKeyType={'next'}
+                                        onSubmitEditing={() => this.passwordRef._root.focus()}
+                                        onChangeText={handleChange('email')}
+                                        value={values.email}
+                                        placeholder='Email'
+                                        onBlur={() => setFieldTouched('email')}
+                                        autoCorrect={false}
+                                        autoCapitalize={'none'}
+                                    />
+
+                                    {(errors.email && touched.email) &&
+                                    <Text style={{color: 'red'}}>{errors.email}</Text>}
                                 </Item>
 
                                 <Item error={errors.password && touched.password} stackedLabel>
